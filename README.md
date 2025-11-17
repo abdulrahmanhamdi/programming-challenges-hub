@@ -1,3 +1,6 @@
+![Contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)
+![Open Source Love](https://img.shields.io/badge/Open%20Source-%E2%9D%A4-red)
+![Made with Love](https://img.shields.io/badge/Made%20with-Love-orange)
 # Programming Challenges Hub | مركز تحديات البرمجة
 
 Welcome to the **Programming Challenges Hub**, an open-source bilingual project  
