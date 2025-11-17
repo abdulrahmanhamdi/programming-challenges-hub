@@ -1,33 +1,52 @@
-/* DARK MODE */
-.dark-mode {
-    background: #0f172a !important;
-    color: #e2e8f0 !important;
+/* assets/css/theme.css */
+
+:root {
+    --bg-body: #f8fafc;
+    --bg-card: #ffffff;
+    --bg-sidebar: #ffffff;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --border-color: #e2e8f0;
+    --primary-color: #0d6efd;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+    --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+    --code-bg: #f1f5f9;
 }
 
-/* NAVBAR */
-.dark-mode nav.navbar {
-    background-color: #1e293b !important;
+body.dark-mode {
+    --bg-body: #0f172a;
+    --bg-card: #1e293b;
+    --bg-sidebar: #1e293b;
+    --text-main: #f1f5f9;
+    --text-muted: #94a3b8;
+    --border-color: #334155;
+    --primary-color: #3b82f6;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.5);
+    --code-bg: #020617;
 }
 
-/* CARDS */
-.dark-mode .card {
-    background: #1e293b !important;
-    border-color: #334155 !important;
+body {
+    background-color: var(--bg-body) !important;
+    color: var(--text-main) !important;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* BUTTONS */
-.dark-mode .btn-outline-secondary {
-    color: #e2e8f0;
-    border-color: #475569;
+body.dark-mode .bg-light {
+    background-color: var(--bg-body) !important;
 }
-
-/* SIDEBAR */
-.dark-mode #sidebar {
-    background: #1e1e1e;
-    border-color: #374151;
+body.dark-mode .bg-white {
+    background-color: var(--bg-card) !important;
 }
-
-/* COPY BUTTON */
-.dark-mode .copy-btn {
-    background: #222;
+body.dark-mode .border, 
+body.dark-mode .border-bottom, 
+body.dark-mode .border-end, 
+body.dark-mode .border-top {
+    border-color: var(--border-color) !important;
+}
+body.dark-mode .text-dark {
+    color: var(--text-main) !important;
+}
+body.dark-mode .text-muted {
+    color: var(--text-muted) !important;
 }

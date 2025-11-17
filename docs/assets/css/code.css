@@ -1,0 +1,47 @@
+/* assets/css/code.css */
+
+pre {
+    background-color: #0d1117 !important;
+    border-radius: 8px;
+    padding: 1rem;
+    position: relative;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--border-color);
+}
+
+code {
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.9em;
+}
+
+.copy-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 4px 10px;
+    font-size: 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.copy-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+p code, 
+li code {
+    background-color: var(--code-bg);
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: #ea580c;
+    font-size: 0.9em;
+}
+
+body.dark-mode p code, 
+body.dark-mode li code {
+    color: #fdba74;
+}
