@@ -1,21 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Solutions | Coding Hub</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solution Viewer | Coding Hub</title>
 
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Highlight.js (code highlight) -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+
+    <!-- Global styles -->
     <link rel="stylesheet" href="assets/css/style.css">
 
     <style>
-        body.dark-mode {
-            background-color: #121212 !important;
-            color: #e2e2e2 !important;
+        #solutionContainer {
+            max-width: 900px;
+            margin: 20px auto;
         }
-        .dark-mode .card {
-            background-color: #1e1e1e;
-            border-color: #333;
+        pre {
+            position: relative;
+            overflow-x: auto;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            padding: 4px 10px;
+            border: none;
+            background: #444;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .dark-mode .copy-btn {
+            background: #222;
+        }
+
+        /* LeetCode-style language tabs */
+        .lang-tabs {
+            border-bottom: 1px solid #e5e7eb;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+        .dark-mode .lang-tabs {
+            border-color: #374151;
+        }
+        .lang-tab-btn {
+            border: none;
+            background: transparent;
+            padding: 10px 18px;
+            margin-right: 4px;
+            font-weight: 600;
+            font-size: 14px;
+            border-radius: 8px 8px 0 0;
+            position: relative;
+            color: #4b5563;
+        }
+        .lang-tab-btn span.lang-icon {
+            margin-right: 6px;
+        }
+        .lang-tab-btn:hover {
+            background: rgba(148, 163, 184, 0.12);
+        }
+        .dark-mode .lang-tab-btn {
+            color: #e5e7eb;
+        }
+        .lang-tab-btn.active {
+            color: #111827;
+            background: #ffffff;
+        }
+        .dark-mode .lang-tab-btn.active {
+            background: #111827;
+            color: #f9fafb;
+        }
+        .lang-tab-btn.active::after {
+            content: "";
+            position: absolute;
+            left: 15%;
+            right: 15%;
+            bottom: -1px;
+            height: 3px;
+            border-radius: 999px;
+            background: currentColor;
+        }
+        /* Slight color tint per language */
+        .lang-tab-btn.lang-python.active { color: #22c55e; }       /* green */
+        .lang-tab-btn.lang-javascript.active { color: #eab308; }   /* yellow */
+        .lang-tab-btn.lang-java.active { color: #f97316; }         /* orange */
+        .lang-tab-btn.lang-cpp.active { color: #3b82f6; }          /* blue */
+
+        /* Card styling tweak */
+        .solution-card {
+            border-radius: 16px;
         }
     </style>
 </head>
@@ -33,7 +114,7 @@
 
         <div class="collapse navbar-collapse" id="navbarNav">
 
-            <ul class="navbar-nav me-auto">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="problems.html">Problems</a></li>
                 <li class="nav-item"><a class="nav-link active" href="solutions.html">Solutions</a></li>
@@ -43,86 +124,233 @@
                 <li class="nav-item"><a class="nav-link" href="contributors.html">Contributors</a></li>
             </ul>
 
-            <input id="globalSearchInput" class="form-control me-2 w-25" placeholder="Search problems..." />
             <button class="btn btn-light" onclick="toggleTheme()">🌙 / ☀️</button>
         </div>
     </div>
 </nav>
 
 
-<div class="container mt-4">
+<div id="solutionContainer" class="animate-fade">
 
-    <h2 class="mb-4 text-center">All Solutions</h2>
+    <h2 id="problemTitle" class="mb-1">Loading...</h2>
+    <p id="problemMeta" class="text-muted mb-3"></p>
 
-    <div id="solutionsList" class="row row-cols-1 row-cols-md-2 g-4"></div>
+    <!-- Language Tabs -->
+    <div class="lang-tabs mb-3" id="langTabs"></div>
+
+    <!-- Code Viewer -->
+    <div id="codeWrapper"></div>
+
+    <hr class="my-4">
+
+    <div class="d-flex justify-content-between">
+        <button id="prevBtn" class="btn btn-outline-secondary">← Previous Problem</button>
+        <button id="nextBtn" class="btn btn-outline-secondary">Next Problem →</button>
+    </div>
+
 </div>
 
 
 <script src="assets/js/site.js"></script>
-
 <script>
+// ========= Helper: HTML escape =========
+function escapeHtml(str) {
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+}
 
+// ========= Read query params =========
+const params = new URLSearchParams(window.location.search);
+const slug = params.get('slug');   // example: reverse_string
+const defaultLang = params.get('lang') || 'python';
+
+if (!slug) {
+    document.getElementById('problemTitle').innerText = 'Solution Not Found';
+}
+
+// ========= Global data =========
+let PROBLEMS = [];
+let CURRENT_INDEX = -1;
+
+const LANGS = [
+    { id: 'python',    label: 'Python',       icon: '🐍', folder: '../solutions/python/',    ext: '.py',   hl: 'language-python' },
+    { id: 'javascript',label: 'JavaScript',   icon: '⚡', folder: '../solutions/javascript/',ext: '.js',   hl: 'language-javascript' },
+    { id: 'java',      label: 'Java',         icon: '☕', folder: '../solutions/java/',      ext: '.java', hl: 'language-java' },
+    { id: 'cpp',       label: 'C++',          icon: '💠', folder: '../solutions/cpp/',       ext: '.cpp',  hl: 'language-cpp' }
+];
+
+let AVAILABLE_LANGS = [];   // { id, label, icon, folder, ext, hl, code, filePath }
+let CODE_CACHE = {};        // langId -> code string
+
+
+// ========= Load PROBLEMS_INDEX to get title/difficulty/order =========
 fetch('../PROBLEMS_INDEX.md')
-    .then(res => res.text())
-    .then(text => {
-        const container = document.getElementById("solutionsList");
-        const lines = text.split("\n");
+  .then(res => res.text())
+  .then(text => {
+      const lines = text.split('\n').filter(l => l.startsWith('| ') && l.includes('.md'));
 
-        lines.forEach(line => {
-            if (line.startsWith("| ") && line.includes(".md")) {
+      lines.forEach((line, index) => {
+          const parts = line.split('|');
+          const title = parts[1].trim();
+          const difficulty = parts[2].trim();
+          const link = parts[3].match(/\((.*)\)/)[1];
 
-                const parts = line.split("|");
-                const title = parts[1].trim();
-                const difficulty = parts[2].trim();
-                const problemLink = parts[3].match(/\((.*)\)/)[1];
+          const base = link.split('/').pop().replace('.md',''); // slug from problem file
 
-                const slug = problemLink.split("/").pop().replace(".md", "");
+          PROBLEMS.push({ index, title, difficulty, link, slug: base });
+      });
 
-                const baseSolution = problemLink.replace("problems/", "solutions/").replace(".md", "");
+      CURRENT_INDEX = PROBLEMS.findIndex(p => p.slug === slug);
 
-                const card = `
-                    <div class="col animate-slide-up">
-                        <div class="card p-3 shadow-sm">
-                            <h5>${title}</h5>
-                            <p><strong>Difficulty:</strong> ${difficulty}</p>
+      if (CURRENT_INDEX === -1) {
+          document.getElementById('problemTitle').innerText = 'Unknown Problem';
+          return;
+      }
 
-                            <a href="problem.html?id=${problemLink}" class="text-primary">
-                                Open Problem
-                            </a><br>
+      const current = PROBLEMS[CURRENT_INDEX];
+      document.getElementById('problemTitle').innerText = current.title;
+      document.getElementById('problemMeta').innerText =
+        `Difficulty: ${current.difficulty} · Slug: ${current.slug}`;
 
-                            <a class="text-success" href="../${baseSolution}.py" target="_blank">
-                                Python Solution
-                            </a><br>
+      setupPrevNext();
+      loadAllLanguages();
+  });
 
-                            <a class="text-warning" href="../${baseSolution}.js" target="_blank">
-                                JavaScript Solution
-                            </a><br>
 
-                            <a class="text-danger" href="../${baseSolution}.java" target="_blank">
-                                Java Solution
-                            </a><br>
+// ========= Load all language files for this slug =========
+async function loadAllLanguages() {
+    for (const lang of LANGS) {
+        const filePath = `${lang.folder}${slug}${lang.ext}`;
 
-                            <a class="text-info" href="../${baseSolution}.cpp" target="_blank">
-                                C++ Solution
-                            </a>
-
-                            <br><br>
-
-                            <a href="solution.html?slug=${slug}"
-                               class="btn btn-sm btn-outline-primary">
-                                Open Solutions Viewer →
-                            </a>
-                        </div>
-                    </div>
-                `;
-
-                container.innerHTML += card;
+        try {
+            const res = await fetch(filePath);
+            if (res.ok) {
+                const code = await res.text();
+                AVAILABLE_LANGS.push({ ...lang, code, filePath });
+                CODE_CACHE[lang.id] = code;
             }
-        });
+        } catch (e) {
+            // ignore missing
+        }
+    }
+
+    if (AVAILABLE_LANGS.length === 0) {
+        document.getElementById('codeWrapper').innerHTML =
+          '<p class="text-muted">No solutions available yet for this problem.</p>';
+        return;
+    }
+
+    buildLangTabs();
+    const firstLang = AVAILABLE_LANGS.find(l => l.id === defaultLang) || AVAILABLE_LANGS[0];
+    showLanguage(firstLang.id);
+}
+
+
+// ========= Build LeetCode-style tabs for available languages =========
+function buildLangTabs() {
+    const tabs = document.getElementById('langTabs');
+    tabs.innerHTML = '';
+
+    AVAILABLE_LANGS.forEach(lang => {
+        tabs.innerHTML += `
+            <button 
+                class="lang-tab-btn lang-${lang.id}" 
+                id="tab-${lang.id}"
+                type="button"
+            >
+                <span class="lang-icon">${lang.icon}</span>
+                <span class="lang-label">${lang.label}</span>
+            </button>
+        `;
     });
 
-setupSearch("globalSearchInput", "solutionsList");
+    // Add click handlers
+    AVAILABLE_LANGS.forEach(lang => {
+        const btn = document.getElementById('tab-' + lang.id);
+        if (btn) {
+            btn.addEventListener('click', () => showLanguage(lang.id));
+        }
+    });
+}
 
+
+// ========= Show a given language's solution =========
+function showLanguage(langId) {
+    const lang = AVAILABLE_LANGS.find(l => l.id === langId);
+    if (!lang) return;
+
+    // set active tab
+    AVAILABLE_LANGS.forEach(l => {
+        const btn = document.getElementById('tab-' + l.id);
+        if (btn) btn.classList.toggle('active', l.id === langId);
+    });
+
+    const code = CODE_CACHE[langId] || '';
+    const escaped = escapeHtml(code);
+
+    const wrapper = document.getElementById('codeWrapper');
+    wrapper.innerHTML = `
+        <div class="card shadow-sm solution-card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span>
+                    ${lang.icon} <strong>${lang.label} Solution</strong>
+                </span>
+                <a href="${lang.filePath}" target="_blank" class="btn btn-sm btn-outline-secondary">
+                    Open Raw File
+                </a>
+            </div>
+            <div class="card-body">
+                <pre><code class="${lang.hl}">${escaped}</code></pre>
+            </div>
+        </div>
+    `;
+
+    // Add copy button
+    const pre = wrapper.querySelector('pre');
+    if (pre) {
+        const btn = document.createElement('button');
+        btn.className = 'copy-btn';
+        btn.innerText = 'Copy';
+        btn.onclick = () => {
+            navigator.clipboard.writeText(code);
+            btn.innerText = 'Copied!';
+            setTimeout(() => btn.innerText = 'Copy', 1000);
+        };
+        pre.appendChild(btn);
+    }
+
+    // Highlight
+    const codeEl = wrapper.querySelector('code');
+    if (codeEl) {
+        hljs.highlightElement(codeEl);
+    }
+}
+
+
+// ========= Prev / Next navigation =========
+function setupPrevNext() {
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    prevBtn.disabled = (CURRENT_INDEX <= 0);
+    nextBtn.disabled = (CURRENT_INDEX >= PROBLEMS.length - 1);
+
+    prevBtn.onclick = () => {
+        if (CURRENT_INDEX > 0) {
+            const prevSlug = PROBLEMS[CURRENT_INDEX - 1].slug;
+            window.location.href = `solution.html?slug=${prevSlug}`;
+        }
+    };
+
+    nextBtn.onclick = () => {
+        if (CURRENT_INDEX < PROBLEMS.length - 1) {
+            const nextSlug = PROBLEMS[CURRENT_INDEX + 1].slug;
+            window.location.href = `solution.html?slug=${nextSlug}`;
+        }
+    };
+}
 </script>
 
 </body>

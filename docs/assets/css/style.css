@@ -38,3 +38,16 @@
     transform: translateY(0);
   }
 }
+.fav-btn {
+    border: none;
+    background: transparent;
+    font-size: 20px;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    cursor: pointer;
+}
+.fav-btn.active {
+    color: gold;
+    text-shadow: 0 0 8px rgba(255,215,0,0.6);
+}

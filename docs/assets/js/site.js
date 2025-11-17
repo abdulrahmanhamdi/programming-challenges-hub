@@ -115,4 +115,44 @@ function setupSearch(inputId, containerId) {
         renderSearchResults(results, containerId);
     });
 }
+function getFavorites() {
+    return JSON.parse(localStorage.getItem("favorites") || "[]");
+}
+
+function saveFavorites(favs) {
+    localStorage.setItem("favorites", JSON.stringify(favs));
+}
+
+function isFavorite(slug) {
+    return getFavorites().some(f => f.slug === slug);
+}
+
+function toggleFavorite(slug, title, difficulty, link) {
+    let favs = getFavorites();
+
+    if (isFavorite(slug)) {
+        favs = favs.filter(f => f.slug !== slug);
+    } else {
+        favs.push({ slug, title, difficulty, link });
+    }
+
+    saveFavorites(favs);
+    updateFavButtons();
+}
+
+function updateFavButtons() {
+    const favs = getFavorites();
+
+    document.querySelectorAll(".fav-btn").forEach(btn => {
+        const slug = btn.getAttribute("data-slug");
+        if (!slug) return;
+
+        if (isFavorite(slug)) btn.classList.add("active");
+        else btn.classList.remove("active");
+    });
+}
+
+window.onload = () => {
+    updateFavButtons();
+};
 
