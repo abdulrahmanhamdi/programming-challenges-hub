@@ -1,0 +1,79 @@
+/* FAVORITES BUTTON */
+.fav-btn {
+    border: none;
+    background: transparent;
+    font-size: 26px;
+    cursor: pointer;
+}
+.fav-btn.active {
+    color: gold;
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+}
+
+/* DIFFICULTY BADGES */
+.easy { background:#16a34a; }
+.medium { background:#ca8a04; }
+.hard { background:#dc2626; }
+.difficulty-badge {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: bold;
+    color: white;
+}
+
+/* SIDEBAR */
+#sidebar {
+    height: 100vh;
+    width: 260px;
+    overflow-y: auto;
+    background: #fafafa;
+    border-right: 1px solid #ddd;
+    position: fixed;
+    padding: 20px;
+}
+#sidebar a {
+    display: block;
+    padding: 7px 0;
+    border-radius: 6px;
+    text-decoration: none;
+    color: inherit;
+}
+#sidebar a:hover {
+    background: rgba(0,0,0,0.07);
+}
+
+/* COPY BUTTON */
+.copy-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    padding: 4px 10px;
+    background: #444;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    font-size: 12px;
+}
+
+/* ANIMATIONS */
+.animate-slide-up { animation: slideUp 0.5s ease forwards; }
+.animate-fade { animation: fadeIn 0.5s ease forwards; }
+
+@keyframes slideUp {
+    from { transform: translateY(15px); opacity: 0; }
+    to   { transform: translateY(0); opacity: 1; }
+}
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}

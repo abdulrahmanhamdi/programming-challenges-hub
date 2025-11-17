@@ -1,0 +1,25 @@
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* BODY */
+body {
+    font-family: "Inter", sans-serif;
+    background: #f8fafc;
+    color: #111827;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-thumb {
+    background: #9ca3af;
+    border-radius: 4px;
+}
+
+/* LAYOUT */
+.container { max-width: 1200px; }
+.card { border-radius: 14px; }

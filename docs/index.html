@@ -3,108 +3,79 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Programming Challenges Hub</title>
+    <title>Coding Hub | Programming Challenges</title>
 
-    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css">
 
-    <style>
-        body.dark-mode { background:#121212 !important; color:#e2e2e2 !important; }
-        .dark-mode .card { background:#1e1e1e; border-color:#333; }
-        .dark-mode a { color:#90caf9; }
-    </style>
+    <link rel="stylesheet" href="assets/css/global.css">
+    <link rel="stylesheet" href="assets/css/theme.css">
+    <link rel="stylesheet" href="assets/css/components.css">
 </head>
-
 <body class="bg-light">
 
-<!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <div class="container-fluid">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="index.html">Coding Hub</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-        <a class="navbar-brand" href="index.html">Coding Hub</a>
-
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarNav">
-
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
-                <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="problems.html">Problems</a></li>
-                <li class="nav-item"><a class="nav-link" href="solutions.html">Solutions</a></li>
-                <li class="nav-item"><a class="nav-link" href="search.html">Search</a></li>
-                <li class="nav-item"><a class="nav-link" href="stats.html">Statistics</a></li>
-                <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
-                <li class="nav-item"><a class="nav-link" href="contributors.html">Contributors</a></li>
-
-
-            </ul>
-
-            <input id="globalSearchInput" class="form-control me-2 w-25" placeholder="Search problems..." />
-            <button class="btn btn-light" onclick="toggleTheme()">🌙 / ☀️</button>
-        </div>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="problems.html">Problems</a></li>
+        <li class="nav-item"><a class="nav-link" href="favorites.html">Favorites</a></li>
+        <li class="nav-item"><a class="nav-link" href="search.html">Search</a></li>
+        <li class="nav-item"><a class="nav-link" href="stats.html">Statistics</a></li>
+        <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="contributors.html">Contributors</a></li>
+      </ul>
+      <button class="btn btn-light btn-sm" onclick="toggleTheme()">🌙 / ☀️</button>
     </div>
+  </div>
 </nav>
 
-<!-- HERO -->
-<section class="py-5 text-center bg-light animate-fade">
-    <div class="container">
-        <h1 class="display-5 fw-bold">Sharpen Your Coding Skills</h1>
-        <p class="lead">Bilingual Open-Source Platform for Algorithm Challenges (English + Arabic)</p>
-        <a href="solutions.html" class="btn btn-primary btn-lg mt-3">View Solutions</a>
-        <a href="problems.html" class="btn btn-outline-primary btn-lg mt-3">Browse Problems</a>
+<section class="py-5">
+  <div class="container text-center">
+    <h1 class="display-5 mb-3">Welcome to <span class="text-primary">Coding Hub</span></h1>
+    <p class="lead mb-4">
+      Open-source repository of programming challenges with multi-language solutions.<br/>
+      Practice, contribute, and learn algorithms like LeetCode – but on your own platform.
+    </p>
+
+    <div class="d-flex justify-content-center gap-3 mb-5">
+      <a href="problems.html" class="btn btn-primary btn-lg">Browse Problems</a>
+      <a href="favorites.html" class="btn btn-outline-primary btn-lg">My Favorites</a>
     </div>
+
+    <hr class="my-4">
+
+    <div class="row g-4 mt-2">
+      <div class="col-md-4">
+        <div class="card p-3 shadow-sm animate-slide-up">
+          <h4>🎯 Structured Problems</h4>
+          <p class="text-muted mb-0">All challenges indexed automatically by difficulty.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card p-3 shadow-sm animate-slide-up">
+          <h4>💻 Multi-language</h4>
+          <p class="text-muted mb-0">Solutions in Python, JavaScript, Java, and C++.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card p-3 shadow-sm animate-slide-up">
+          <h4>🌍 Open Source</h4>
+          <p class="text-muted mb-0">Perfect playground for beginners to make their first pull request.</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
-<!-- FEATURES -->
-<div class="container my-5">
-    <div class="row g-4">
-        <div class="col-md-4"><div class="card p-3 shadow-sm"><h4>📘 Multi-Language Solutions</h4><p>Python, JavaScript, Java, C++.</p></div></div>
-        <div class="col-md-4"><div class="card p-3 shadow-sm"><h4>🧠 Easy, Medium, Hard</h4><p>Structured problem sets.</p></div></div>
-        <div class="col-md-4"><div class="card p-3 shadow-sm"><h4>🤝 Open Source Friendly</h4><p>Perfect for contributions.</p></div></div>
-    </div>
-</div>
-
-<!-- CONTRIBUTORS -->
-<div class="container my-5">
-    <h2 class="text-center mb-4">⭐ Contributors</h2>
-    <div id="contributors" class="row g-4 justify-content-center"></div>
-</div>
-
-<footer class="text-center py-4">
-    <p>© 2025 Programming Challenges Hub — Open Source Project</p>
-</footer>
-
-<script src="assets/js/site.js"></script>
-
-<script>
-// THEME SWITCH
-function toggleTheme(){ document.body.classList.toggle("dark-mode"); }
-
-// CONTRIBUTORS FETCH
-fetch("https://api.github.com/repos/USERNAME/REPO/contributors")
-  .then(res => res.json())
-  .then(data => {
-      const container = document.getElementById("contributors");
-      data.forEach(c => {
-          const card = `
-            <div class="col-md-3 text-center">
-                <div class="card p-3 shadow-sm">
-                    <img src="${c.avatar_url}" class="img-fluid rounded-circle mb-2" width="80" />
-                    <h6>${c.login}</h6>
-                    <a href="${c.html_url}" target="_blank">Profile →</a>
-                </div>
-            </div>`;
-          container.innerHTML += card;
-      });
-  });
-
-// SEARCH ENABLE
-setupSearch("globalSearchInput", "globalResults");
-</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/core.js"></script>
 
 </body>
 </html>

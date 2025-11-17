@@ -1,0 +1,33 @@
+/* HEADINGS */
+#problemContent h1,
+#problemContent h2,
+#problemContent h3 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+/* PARAGRAPH */
+#problemContent p {
+    line-height: 1.7;
+    margin-bottom: 15px;
+}
+
+/* LISTS */
+#problemContent ul,
+#problemContent ol {
+    margin-left: 20px;
+    margin-bottom: 15px;
+}
+
+/* BLOCKQUOTE */
+#problemContent blockquote {
+    padding: 10px 15px;
+    border-left: 4px solid #3b82f6;
+    background: #e0f2fe;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+.dark-mode #problemContent blockquote {
+    background: #1e293b;
+}

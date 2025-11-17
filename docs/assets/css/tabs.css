@@ -1,0 +1,47 @@
+.lang-tabs {
+    border-bottom: 1px solid #e5e7eb;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+.dark-mode .lang-tabs {
+    border-color: #475569;
+}
+
+.lang-tab-btn {
+    border: none;
+    background: transparent;
+    padding: 11px 18px;
+    margin-right: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 8px 8px 0 0;
+    position: relative;
+    color: #4b5563;
+}
+.dark-mode .lang-tab-btn { color: #d1d5db; }
+
+.lang-tab-btn.active {
+    color: #111827;
+    background: #ffffff;
+}
+.dark-mode .lang-tab-btn.active {
+    background: #1e293b;
+    color: #f1f5f9;
+}
+
+.lang-tab-btn.active::after {
+    content: "";
+    position: absolute;
+    left: 20%;
+    right: 20%;
+    bottom: -1px;
+    height: 3px;
+    border-radius: 999px;
+    background: currentColor;
+}
+
+/* per-language colors */
+.lang-tab-btn.lang-python.active { color: #22c55e; }
+.lang-tab-btn.lang-javascript.active { color: #eab308; }
+.lang-tab-btn.lang-java.active { color: #f97316; }
+.lang-tab-btn.lang-cpp.active { color: #3b82f6; }

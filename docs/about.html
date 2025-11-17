@@ -2,149 +2,49 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About | Coding Hub</title>
-
-    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css">
-
-    <style>
-        .section-title {
-            font-weight: bold;
-            font-size: 28px;
-            margin-bottom: 20px;
-        }
-    </style>
+    <link rel="stylesheet" href="assets/css/global.css">
+    <link rel="stylesheet" href="assets/css/theme.css">
+    <link rel="stylesheet" href="assets/css/components.css">
 </head>
 <body class="bg-light">
 
-<!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container-fluid">
-
         <a class="navbar-brand" href="index.html">Coding Hub</a>
-
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarNav">
-
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
-                <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="problems.html">Problems</a></li>
-                <li class="nav-item"><a class="nav-link" href="solutions.html">Solutions</a></li>
-                <li class="nav-item"><a class="nav-link" href="search.html">Search</a></li>
-                <li class="nav-item"><a class="nav-link" href="stats.html">Statistics</a></li>
-                <li class="nav-item"><a class="nav-link active" href="about.html">About</a></li>
-                <li class="nav-item"><a class="nav-link" href="contributors.html">Contributors</a></li>
-
-            </ul>
-
-            <input id="globalSearchInput" class="form-control me-2 w-25" placeholder="Search problems...">
-
-            <button class="btn btn-light" onclick="toggleTheme()">🌙 / ☀️</button>
+        <div class="ms-auto">
+            <a href="index.html" class="btn btn-sm btn-outline-light">Home</a>
         </div>
     </div>
 </nav>
 
-
-<!-- HEADER -->
-<section class="py-5 text-center animate-slide-up">
-    <div class="container">
-        <h1 class="fw-bold">About Coding Hub</h1>
-        <p class="lead mt-3">
-            A community-driven platform for algorithmic problems, multi-language solutions,
-            and open-source learning.
+<div class="container mt-5">
+    <div class="card shadow p-5">
+        <h2 class="mb-4">About Coding Hub</h2>
+        <p class="lead">
+            Coding Hub is an open-source repository of programming challenges,
+            designed to help students and developers practice algorithms and data structures.
         </p>
-    </div>
-</section>
+        
+        <hr>
 
-
-<!-- WHAT IS THIS PROJECT -->
-<div class="container my-5 animate-fade">
-    <div class="section-title">📘 What Is Coding Hub?</div>
-    <p>
-        Coding Hub is an open-source bilingual (English + Arabic) project focused on providing
-        algorithmic problems and solutions in multiple programming languages.
-    </p>
-    <p>
-        This project aims to help:
-    </p>
-
-    <ul>
-        <li>Students learning data structures & algorithms</li>
-        <li>Developers preparing for technical interviews</li>
-        <li>Beginner contributors exploring open-source</li>
-        <li>Teachers who want structured problem sets</li>
-    </ul>
-</div>
-
-
-<!-- TECH STACK -->
-<div class="container my-5 animate-slide-up">
-    <div class="section-title">🛠 Tech Stack</div>
-
-    <div class="row g-4">
-        <div class="col-md-3"><div class="card p-3 text-center shadow-sm">Python</div></div>
-        <div class="col-md-3"><div class="card p-3 text-center shadow-sm">JavaScript</div></div>
-        <div class="col-md-3"><div class="card p-3 text-center shadow-sm">Java</div></div>
-        <div class="col-md-3"><div class="card p-3 text-center shadow-sm">C++</div></div>
+        <h4 class="mt-4">How to Contribute?</h4>
+        <p>We welcome all contributions! You can help by:</p>
+        <ul>
+            <li>Adding new problems to the <code>problems/</code> folder.</li>
+            <li>Submitting solutions in Python, Java, C++, or JS.</li>
+            <li>Improving the documentation.</li>
+        </ul>
+        
+        <a href="https://github.com/abdulrahmanhamdi/coding-hub" class="btn btn-dark mt-3" target="_blank">
+            View on GitHub
+        </a>
     </div>
 </div>
 
-
-<!-- HOW IT WORKS -->
-<div class="container my-5 animate-fade">
-    <div class="section-title">⚙️ How It Works</div>
-
-    <ol>
-        <li>Read problems categorized by difficulty.</li>
-        <li>Choose your preferred programming language.</li>
-        <li>View solutions written by contributors.</li>
-        <li>Submit your own solutions or improve existing ones.</li>
-        <li>Open Pull Requests to contribute to the project.</li>
-    </ol>
-</div>
-
-
-<!-- ROADMAP -->
-<div class="container my-5 animate-slide-up">
-    <div class="section-title">🚀 Roadmap</div>
-
-    <ul>
-        <li>✔ Add multi-language solutions (Python / JS / Java / C++)</li>
-        <li>✔ Add search engine</li>
-        <li>✔ Add Problems & Solutions Pages</li>
-        <li>⬜ Add Statistics Dashboard</li>
-        <li>⬜ Add Contributors Leaderboard</li>
-        <li>⬜ Add more languages (Go, Rust, C#)</li>
-        <li>⬜ Add problem tagging system</li>
-        <li>⬜ Add online coding playground</li>
-    </ul>
-</div>
-
-
-<!-- CTA -->
-<div class="container my-5 text-center animate-slide-up">
-    <h2>🤝 Want to Contribute?</h2>
-    <p>Check CONTRIBUTING.md and join the community!</p>
-    <a class="btn btn-primary btn-lg" href="https://github.com/USERNAME/REPO" target="_blank">
-        Visit GitHub Repository →
-    </a>
-</div>
-
-
-<footer class="text-center py-4">
-    <p>© 2025 Coding Hub — Open Source Project</p>
-</footer>
-
-<script src="assets/js/site.js"></script>
-<script>
-setupSearch("globalSearchInput", "searchResults");
-</script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/core.js"></script>
 
 </body>
 </html>

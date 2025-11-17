@@ -1,0 +1,33 @@
+/* DARK MODE */
+.dark-mode {
+    background: #0f172a !important;
+    color: #e2e8f0 !important;
+}
+
+/* NAVBAR */
+.dark-mode nav.navbar {
+    background-color: #1e293b !important;
+}
+
+/* CARDS */
+.dark-mode .card {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+}
+
+/* BUTTONS */
+.dark-mode .btn-outline-secondary {
+    color: #e2e8f0;
+    border-color: #475569;
+}
+
+/* SIDEBAR */
+.dark-mode #sidebar {
+    background: #1e1e1e;
+    border-color: #374151;
+}
+
+/* COPY BUTTON */
+.dark-mode .copy-btn {
+    background: #222;
+}

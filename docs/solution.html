@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solution Viewer | Coding Hub</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css">
+
+    <link rel="stylesheet" href="assets/css/global.css">
+    <link rel="stylesheet" href="assets/css/theme.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/tabs.css">
+    <link rel="stylesheet" href="assets/css/code.css">
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="index.html">Coding Hub</a>
+        <div class="ms-auto">
+             <a href="problems.html" class="btn btn-sm btn-outline-light">Back to Problems</a>
+             <button class="btn btn-light btn-sm ms-2" onclick="toggleTheme()">🌙 / ☀️</button>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 id="problemTitle">Loading Solution...</h2>
+        <a id="problemLinkBtn" href="#" class="btn btn-outline-primary">See Problem Description</a>
+    </div>
+    
+    <div class="lang-tabs mb-0" id="langTabs">
+        <button class="lang-tab-btn active" onclick="switchLang('python')">🐍 Python</button>
+        <button class="lang-tab-btn" onclick="switchLang('javascript')">⚡ JavaScript</button>
+        <button class="lang-tab-btn" onclick="switchLang('java')">☕ Java</button>
+        <button class="lang-tab-btn" onclick="switchLang('cpp')">💠 C++</button>
+    </div>
+
+    <div class="card rounded-0 rounded-bottom shadow-sm border-top-0">
+        <div class="card-body p-0 position-relative">
+            <button class="copy-btn" onclick="copyCode()">Copy</button>
+            <pre class="m-0"><code id="codeBlock" class="hljs p-4">Select a language to load code...</code></pre>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between mt-4">
+        <button class="btn btn-outline-secondary" onclick="history.back()">← Go Back</button>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/core.js"></script>
+
+<script>
+    const params = new URLSearchParams(window.location.search);
+    const slug = params.get("slug"); // e.g. "two-sum"
+    
+    // 1. Initialize Page
+    if(slug) {
+        document.getElementById("problemTitle").innerText = "Solution: " + slug;
+        // Try to find problem link (optional heuristic)
+        // We don't know the difficulty here without fetching index, 
+        // so we might just link to problems list or try a guess.
+        document.getElementById("problemLinkBtn").href = `problems.html`; 
+        
+        // Load default language
+        switchLang('python');
+    } else {
+        document.getElementById("problemTitle").innerText = "No solution selected";
+    }
+
+    // 2. Switch Language Logic
+    async function switchLang(lang) {
+        // Update UI Tabs
+        document.querySelectorAll('.lang-tab-btn').forEach(b => b.classList.remove('active'));
+        event.target.classList.add('active');
+        
+        const codeBlock = document.getElementById("codeBlock");
+        codeBlock.innerText = "Loading...";
+        codeBlock.className = "hljs p-4"; // reset class
+
+        // Construct Path
+        const extMap = { python: '.py', javascript: '.js', java: '.java', cpp: '.cpp' };
+        // CONFIG.SOLUTION_DIRS returns path like "../solutions/python/"
+        const fullPath = CONFIG.SOLUTION_DIRS[lang] + slug + extMap[lang];
+
+        try {
+            const res = await fetch(fullPath);
+            if(!res.ok) throw new Error("Solution file not found.");
+            
+            const code = await res.text();
+            codeBlock.innerText = code;
+            
+            // Syntax Highlight
+            codeBlock.classList.add(`language-${lang}`);
+            hljs.highlightElement(codeBlock);
+            
+        } catch(e) {
+            codeBlock.innerText = `// Solution for ${lang} is not available yet.\n// Path checked: ${fullPath}`;
+        }
+    }
+
+    // 3. Copy Function
+    function copyCode() {
+        const code = document.getElementById("codeBlock").innerText;
+        navigator.clipboard.writeText(code);
+        const btn = document.querySelector('.copy-btn');
+        btn.innerText = "Copied!";
+        setTimeout(() => btn.innerText = "Copy", 1500);
+    }
+</script>
+
+</body>
+</html>
