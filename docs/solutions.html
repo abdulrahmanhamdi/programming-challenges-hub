@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Solutions | Programming Challenges Hub</title>
+
+    <!-- Bootstrap CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body.dark-mode {
+            background-color: #121212 !important;
+            color: #e2e2e2 !important;
+        }
+        .dark-mode .card {
+            background-color: #1e1e1e;
+            border-color: #333;
+        }
+        .dark-mode a {
+            color: #90caf9;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Solutions</a>
+    <button class="btn btn-light" onclick="toggleTheme()">🌙 / ☀️</button>
+  </div>
+</nav>
+
+<div class="container mt-4">
+
+    <h2 class="mb-3 text-center">All Solutions</h2>
+
+    <!-- Search Bar -->
+    <div class="input-group mb-4">
+        <input type="text" id="searchInput" class="form-control" placeholder="Search problems...">
+    </div>
+
+    <div id="solutionsList" class="row row-cols-1 row-cols-md-2 g-4">
+        <!-- Filled Automatically by JS using PROBLEMS_INDEX.md -->
+    </div>
+</div>
+
+<script>
+// Theme Toggle
+function toggleTheme() {
+    document.body.classList.toggle("dark-mode");
+}
+
+// Auto-fetch PROBLEMS_INDEX.md and parse
+fetch('../PROBLEMS_INDEX.md')
+    .then(res => res.text())
+    .then(text => {
+        const container = document.getElementById("solutionsList");
+        const lines = text.split("\n");
+
+        lines.forEach(line => {
+            if (line.startsWith("| ") && line.includes(".md")) {
+                const parts = line.split("|");
+                const title = parts[1].trim();
+                const difficulty = parts[2].trim();
+                const link = parts[3].match(/\((.*)\)/)[1];
+
+                const card = `
+                    <div class="col">
+                        <div class="card p-3 shadow-sm">
+                            <h5>${title}</h5>
+                            <p><strong>Difficulty:</strong> ${difficulty}</p>
+                            <a href="../${link}" target="_blank">View Problem</a>
+                        </div>
+                    </div>`;
+
+                container.innerHTML += card;
+            }
+        });
+    });
+
+// Search Filter
+const searchInput = document.getElementById("searchInput");
+searchInput.addEventListener("keyup", function() {
+    let filter = searchInput.value.toLowerCase();
+    let cards = document.querySelectorAll('#solutionsList .col');
+
+    cards.forEach(card => {
+        let text = card.innerText.toLowerCase();
+        card.style.display = text.includes(filter) ? "block" : "none";
+    });
+});
+</script>
+
+</body>
+</html>
