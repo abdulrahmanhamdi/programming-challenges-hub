@@ -1,0 +1,40 @@
+/* ====== Global Card Hover Effect ====== */
+.card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+
+/* ====== Fade-in Animation ====== */
+.animate-fade {
+  opacity: 0;
+  animation: fadeIn 0.6s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+
+/* ====== Slide-up Animation ====== */
+.animate-slide-up {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: slideUp 0.6s ease forwards;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
