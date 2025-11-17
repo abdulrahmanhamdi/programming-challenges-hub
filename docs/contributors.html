@@ -35,14 +35,13 @@
             font-weight: 600;
             margin-bottom: 5px;
         }
-        .rank-1 { color: #eab308; } /* gold */
-        .rank-2 { color: #9ca3af; } /* silver */
-        .rank-3 { color: #b45309; } /* bronze */
+        .rank-1 { color: #eab308; }
+        .rank-2 { color: #9ca3af; }
+        .rank-3 { color: #b45309; }
     </style>
 </head>
 <body class="bg-light">
 
-<!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container-fluid">
 
@@ -83,8 +82,7 @@
 
     <h2 class="text-center mb-3">⭐ Contributors Leaderboard</h2>
     <p class="text-center text-muted mb-4">
-        Thank you to everyone who contributed to this project.  
-        ترتيب المساهمين حسب عدد الـ <strong>contributions</strong> في المستودع.
+        Thank you to everyone who contributed to this project.
     </p>
 
     <div id="contributorsList" class="row g-4 justify-content-center"></div>
@@ -95,16 +93,14 @@
 <script src="assets/js/site.js"></script>
 
 <script>
-const REPO_OWNER = "USERNAME";  // <-- غيّر هذا
-const REPO_NAME  = "REPO";      // <-- وغَيّر هذا
+const REPO_OWNER = "USERNAME";
+const REPO_NAME  = "REPO";
 
-// جلب المساهمين من GitHub API
 fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contributors`)
   .then(res => res.json())
   .then(data => {
       if (!Array.isArray(data)) return;
 
-      // ترتيبهم تنازليًا حسب عدد الـ contributions
       data.sort((a, b) => b.contributions - a.contributions);
 
       const container = document.getElementById("contributorsList");
@@ -136,7 +132,6 @@ fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contributors`)
       });
   });
 
-// تفعيل البحث العام في النـافبار (اختياري هنا)
 setupSearch("globalSearchInput", "searchResults");
 </script>
 
