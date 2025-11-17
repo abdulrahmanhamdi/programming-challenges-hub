@@ -1,13 +1,23 @@
 /* FAVORITES BUTTON */
+
 .fav-btn {
     border: none;
     background: transparent;
-    font-size: 26px;
+    font-size: 1.5rem; 
+    color: #cbd5e1;  
     cursor: pointer;
+    transition: transform 0.2s, color 0.2s;
+    line-height: 1;
 }
+
+.fav-btn:hover {
+    transform: scale(1.2); 
+    color: #94a3b8;
+}
+
 .fav-btn.active {
-    color: gold;
-    text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+    color: #fbbf24; 
+    text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
 }
 
 /* DIFFICULTY BADGES */
