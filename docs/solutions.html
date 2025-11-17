@@ -8,33 +8,30 @@
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Highlight.js (code highlight) -->
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css">
+    <!-- Highlight.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
 
-    <!-- Global styles -->
     <link rel="stylesheet" href="assets/css/style.css">
 
     <style>
         #solutionContainer {
             max-width: 900px;
-            margin: 20px auto;
+            margin: 25px auto;
         }
         pre {
             position: relative;
-            overflow-x: auto;
         }
         .copy-btn {
             position: absolute;
             top: 5px;
             right: 5px;
             padding: 4px 10px;
-            border: none;
             background: #444;
-            color: #fff;
+            color: white;
             border-radius: 5px;
             cursor: pointer;
+            border: none;
             font-size: 12px;
         }
         .dark-mode .copy-btn {
@@ -48,57 +45,69 @@
             white-space: nowrap;
         }
         .dark-mode .lang-tabs {
-            border-color: #374151;
+            border-color: #475569;
         }
         .lang-tab-btn {
             border: none;
             background: transparent;
-            padding: 10px 18px;
-            margin-right: 4px;
+            padding: 11px 18px;
+            margin-right: 8px;
             font-weight: 600;
             font-size: 14px;
+            cursor: pointer;
             border-radius: 8px 8px 0 0;
             position: relative;
             color: #4b5563;
         }
-        .lang-tab-btn span.lang-icon {
-            margin-right: 6px;
+        .dark-mode .lang-tab-btn {
+            color: #d1d5db;
         }
         .lang-tab-btn:hover {
-            background: rgba(148, 163, 184, 0.12);
-        }
-        .dark-mode .lang-tab-btn {
-            color: #e5e7eb;
+            background: rgba(148,163,184,0.12);
         }
         .lang-tab-btn.active {
             color: #111827;
             background: #ffffff;
         }
         .dark-mode .lang-tab-btn.active {
-            background: #111827;
-            color: #f9fafb;
+            background: #1e293b;
+            color: #f1f5f9;
         }
         .lang-tab-btn.active::after {
             content: "";
             position: absolute;
-            left: 15%;
-            right: 15%;
+            left: 20%;
+            right: 20%;
             bottom: -1px;
             height: 3px;
             border-radius: 999px;
             background: currentColor;
         }
-        /* Slight color tint per language */
-        .lang-tab-btn.lang-python.active { color: #22c55e; }       /* green */
-        .lang-tab-btn.lang-javascript.active { color: #eab308; }   /* yellow */
-        .lang-tab-btn.lang-java.active { color: #f97316; }         /* orange */
-        .lang-tab-btn.lang-cpp.active { color: #3b82f6; }          /* blue */
 
-        /* Card styling tweak */
+        /* Per-language colors */
+        .lang-tab-btn.lang-python.active { color: #22c55e !important; }
+        .lang-tab-btn.lang-javascript.active { color: #eab308 !important; }
+        .lang-tab-btn.lang-java.active { color: #f97316 !important; }
+        .lang-tab-btn.lang-cpp.active { color: #3b82f6 !important; }
+
+        /* Card styling */
         .solution-card {
-            border-radius: 16px;
+            border-radius: 14px;
+        }
+
+        /* Favorite button */
+        .fav-btn {
+            border: none;
+            background: transparent;
+            font-size: 26px;
+            cursor: pointer;
+        }
+        .fav-btn.active {
+            color: gold;
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
         }
     </style>
+
 </head>
 <body class="bg-light">
 
@@ -115,13 +124,13 @@
         <div class="collapse navbar-collapse" id="navbarNav">
 
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+
                 <li class="nav-item"><a class="nav-link" href="problems.html">Problems</a></li>
                 <li class="nav-item"><a class="nav-link active" href="solutions.html">Solutions</a></li>
+                <li class="nav-item"><a class="nav-link" href="favorites.html">Favorites ⭐</a></li>
                 <li class="nav-item"><a class="nav-link" href="search.html">Search</a></li>
                 <li class="nav-item"><a class="nav-link" href="stats.html">Statistics</a></li>
-                <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
-                <li class="nav-item"><a class="nav-link" href="contributors.html">Contributors</a></li>
+
             </ul>
 
             <button class="btn btn-light" onclick="toggleTheme()">🌙 / ☀️</button>
@@ -130,9 +139,13 @@
 </nav>
 
 
-<div id="solutionContainer" class="animate-fade">
+<div id="solutionContainer">
 
-    <h2 id="problemTitle" class="mb-1">Loading...</h2>
+    <h2 class="mb-1 d-flex align-items-center">
+        <span id="problemTitle">Loading...</span>
+        <button id="favButton" class="fav-btn ms-3">⭐</button>
+    </h2>
+
     <p id="problemMeta" class="text-muted mb-3"></p>
 
     <!-- Language Tabs -->
@@ -144,83 +157,111 @@
     <hr class="my-4">
 
     <div class="d-flex justify-content-between">
-        <button id="prevBtn" class="btn btn-outline-secondary">← Previous Problem</button>
-        <button id="nextBtn" class="btn btn-outline-secondary">Next Problem →</button>
+        <button id="prevBtn" class="btn btn-outline-secondary">← Previous</button>
+        <button id="nextBtn" class="btn btn-outline-secondary">Next →</button>
     </div>
 
 </div>
 
 
 <script src="assets/js/site.js"></script>
+
 <script>
-// ========= Helper: HTML escape =========
+// ---------- Utils ----------
 function escapeHtml(str) {
-    return str
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;');
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
-// ========= Read query params =========
+// Query params
 const params = new URLSearchParams(window.location.search);
-const slug = params.get('slug');   // example: reverse_string
-const defaultLang = params.get('lang') || 'python';
+const slug = params.get("slug");
+const defaultLang = params.get("lang") || "python";
 
-if (!slug) {
-    document.getElementById('problemTitle').innerText = 'Solution Not Found';
-}
-
-// ========= Global data =========
+// Data
 let PROBLEMS = [];
 let CURRENT_INDEX = -1;
+let CURRENT_PROBLEM = null;
 
+// Language definitions
 const LANGS = [
-    { id: 'python',    label: 'Python',       icon: '🐍', folder: '../solutions/python/',    ext: '.py',   hl: 'language-python' },
-    { id: 'javascript',label: 'JavaScript',   icon: '⚡', folder: '../solutions/javascript/',ext: '.js',   hl: 'language-javascript' },
-    { id: 'java',      label: 'Java',         icon: '☕', folder: '../solutions/java/',      ext: '.java', hl: 'language-java' },
-    { id: 'cpp',       label: 'C++',          icon: '💠', folder: '../solutions/cpp/',       ext: '.cpp',  hl: 'language-cpp' }
+    { id: "python", label: "Python", icon: "🐍", ext: ".py", folder: "../solutions/python/", hl: "language-python" },
+    { id: "javascript", label: "JavaScript", icon: "⚡", ext: ".js", folder: "../solutions/javascript/", hl: "language-javascript" },
+    { id: "java", label: "Java", icon: "☕", ext: ".java", folder: "../solutions/java/", hl: "language-java" },
+    { id: "cpp", label: "C++", icon: "💠", ext: ".cpp", folder: "../solutions/cpp/", hl: "language-cpp" }
 ];
 
-let AVAILABLE_LANGS = [];   // { id, label, icon, folder, ext, hl, code, filePath }
-let CODE_CACHE = {};        // langId -> code string
+let AVAILABLE_LANGS = [];
+let CODE_CACHE = {};
 
 
-// ========= Load PROBLEMS_INDEX to get title/difficulty/order =========
-fetch('../PROBLEMS_INDEX.md')
-  .then(res => res.text())
-  .then(text => {
-      const lines = text.split('\n').filter(l => l.startsWith('| ') && l.includes('.md'));
+// ---------- Load index ----------
+fetch("../PROBLEMS_INDEX.md")
+.then(res => res.text())
+.then(text => {
+    const lines = text.split("\n").filter(l => l.startsWith("| ") && l.includes(".md"));
 
-      lines.forEach((line, index) => {
-          const parts = line.split('|');
-          const title = parts[1].trim();
-          const difficulty = parts[2].trim();
-          const link = parts[3].match(/\((.*)\)/)[1];
+    lines.forEach((line, index) => {
+        const parts = line.split("|");
+        const title = parts[1].trim();
+        const difficulty = parts[2].trim();
+        const link = parts[3].match(/\((.*)\)/)[1];
+        const baseSlug = link.split("/").pop().replace(".md","");
 
-          const base = link.split('/').pop().replace('.md',''); // slug from problem file
+        PROBLEMS.push({ index, title, difficulty, link, slug: baseSlug });
+    });
 
-          PROBLEMS.push({ index, title, difficulty, link, slug: base });
-      });
+    CURRENT_INDEX = PROBLEMS.findIndex(p => p.slug === slug);
+    CURRENT_PROBLEM = PROBLEMS[CURRENT_INDEX];
 
-      CURRENT_INDEX = PROBLEMS.findIndex(p => p.slug === slug);
+    if (!CURRENT_PROBLEM) {
+        document.getElementById("problemTitle").innerText = "Unknown Problem";
+        return;
+    }
 
-      if (CURRENT_INDEX === -1) {
-          document.getElementById('problemTitle').innerText = 'Unknown Problem';
-          return;
-      }
+    document.getElementById("problemTitle").innerText = CURRENT_PROBLEM.title;
+    document.getElementById("problemMeta").innerText =
+        `Difficulty: ${CURRENT_PROBLEM.difficulty} · Slug: ${CURRENT_PROBLEM.slug}`;
 
-      const current = PROBLEMS[CURRENT_INDEX];
-      document.getElementById('problemTitle').innerText = current.title;
-      document.getElementById('problemMeta').innerText =
-        `Difficulty: ${current.difficulty} · Slug: ${current.slug}`;
+    updateFavButton();
 
-      setupPrevNext();
-      loadAllLanguages();
-  });
+    setupPrevNext();
+    loadLanguageFiles();
+});
 
 
-// ========= Load all language files for this slug =========
-async function loadAllLanguages() {
+// ---------- Favorites ----------
+function getFavorites() {
+    return JSON.parse(localStorage.getItem("favorites") || "[]");
+}
+function saveFavorites(favs) {
+    localStorage.setItem("favorites", JSON.stringify(favs));
+}
+function isFavorite(slug) {
+    return getFavorites().some(f => f.slug === slug);
+}
+function toggleFavorite() {
+    let favs = getFavorites();
+
+    if (isFavorite(CURRENT_PROBLEM.slug)) {
+        favs = favs.filter(f => f.slug !== CURRENT_PROBLEM.slug);
+    } else {
+        favs.push(CURRENT_PROBLEM);
+    }
+
+    saveFavorites(favs);
+    updateFavButton();
+}
+function updateFavButton() {
+    const btn = document.getElementById("favButton");
+    btn.onclick = toggleFavorite;
+
+    if (isFavorite(CURRENT_PROBLEM.slug)) btn.classList.add("active");
+    else btn.classList.remove("active");
+}
+
+
+// ---------- Load languages ----------
+async function loadLanguageFiles() {
     for (const lang of LANGS) {
         const filePath = `${lang.folder}${slug}${lang.ext}`;
 
@@ -228,127 +269,95 @@ async function loadAllLanguages() {
             const res = await fetch(filePath);
             if (res.ok) {
                 const code = await res.text();
-                AVAILABLE_LANGS.push({ ...lang, code, filePath });
+                AVAILABLE_LANGS.push({ ...lang, filePath, code });
                 CODE_CACHE[lang.id] = code;
             }
-        } catch (e) {
-            // ignore missing
-        }
-    }
-
-    if (AVAILABLE_LANGS.length === 0) {
-        document.getElementById('codeWrapper').innerHTML =
-          '<p class="text-muted">No solutions available yet for this problem.</p>';
-        return;
+        } catch {}
     }
 
     buildLangTabs();
+
     const firstLang = AVAILABLE_LANGS.find(l => l.id === defaultLang) || AVAILABLE_LANGS[0];
     showLanguage(firstLang.id);
 }
 
 
-// ========= Build LeetCode-style tabs for available languages =========
+// ---------- Build tabs ----------
 function buildLangTabs() {
-    const tabs = document.getElementById('langTabs');
-    tabs.innerHTML = '';
+    const tabs = document.getElementById("langTabs");
+    tabs.innerHTML = "";
 
     AVAILABLE_LANGS.forEach(lang => {
         tabs.innerHTML += `
-            <button 
-                class="lang-tab-btn lang-${lang.id}" 
-                id="tab-${lang.id}"
-                type="button"
-            >
-                <span class="lang-icon">${lang.icon}</span>
-                <span class="lang-label">${lang.label}</span>
+            <button class="lang-tab-btn lang-${lang.id}" id="tab-${lang.id}">
+                ${lang.icon} ${lang.label}
             </button>
         `;
     });
 
-    // Add click handlers
     AVAILABLE_LANGS.forEach(lang => {
-        const btn = document.getElementById('tab-' + lang.id);
-        if (btn) {
-            btn.addEventListener('click', () => showLanguage(lang.id));
-        }
+        document.getElementById("tab-"+lang.id).onclick = () => showLanguage(lang.id);
     });
 }
 
 
-// ========= Show a given language's solution =========
+// ---------- Show language ----------
 function showLanguage(langId) {
     const lang = AVAILABLE_LANGS.find(l => l.id === langId);
-    if (!lang) return;
 
-    // set active tab
     AVAILABLE_LANGS.forEach(l => {
-        const btn = document.getElementById('tab-' + l.id);
-        if (btn) btn.classList.toggle('active', l.id === langId);
+        document.getElementById("tab-"+l.id).classList.toggle("active", l.id === langId);
     });
 
-    const code = CODE_CACHE[langId] || '';
+    const code = CODE_CACHE[langId];
     const escaped = escapeHtml(code);
 
-    const wrapper = document.getElementById('codeWrapper');
-    wrapper.innerHTML = `
-        <div class="card shadow-sm solution-card">
+    document.getElementById("codeWrapper").innerHTML = `
+        <div class="card solution-card shadow-sm">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <span>
-                    ${lang.icon} <strong>${lang.label} Solution</strong>
-                </span>
-                <a href="${lang.filePath}" target="_blank" class="btn btn-sm btn-outline-secondary">
-                    Open Raw File
-                </a>
+                <span>${lang.icon} <strong>${lang.label} Solution</strong></span>
+                <a href="${lang.filePath}" target="_blank" class="btn btn-sm btn-outline-secondary">Open Raw File</a>
             </div>
+
             <div class="card-body">
                 <pre><code class="${lang.hl}">${escaped}</code></pre>
             </div>
         </div>
     `;
 
-    // Add copy button
-    const pre = wrapper.querySelector('pre');
+    const pre = document.querySelector("pre");
     if (pre) {
-        const btn = document.createElement('button');
-        btn.className = 'copy-btn';
-        btn.innerText = 'Copy';
-        btn.onclick = () => {
+        const copyBtn = document.createElement("button");
+        copyBtn.className = "copy-btn";
+        copyBtn.innerText = "Copy";
+        copyBtn.onclick = () => {
             navigator.clipboard.writeText(code);
-            btn.innerText = 'Copied!';
-            setTimeout(() => btn.innerText = 'Copy', 1000);
+            copyBtn.innerText = "Copied!";
+            setTimeout(() => copyBtn.innerText = "Copy", 1000);
         };
-        pre.appendChild(btn);
+        pre.appendChild(copyBtn);
     }
 
-    // Highlight
-    const codeEl = wrapper.querySelector('code');
-    if (codeEl) {
-        hljs.highlightElement(codeEl);
-    }
+    hljs.highlightAll();
 }
 
 
-// ========= Prev / Next navigation =========
+// ---------- Prev/Next ----------
 function setupPrevNext() {
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
 
-    prevBtn.disabled = (CURRENT_INDEX <= 0);
-    nextBtn.disabled = (CURRENT_INDEX >= PROBLEMS.length - 1);
+    prevBtn.disabled = CURRENT_INDEX <= 0;
+    nextBtn.disabled = CURRENT_INDEX >= PROBLEMS.length - 1;
 
     prevBtn.onclick = () => {
-        if (CURRENT_INDEX > 0) {
-            const prevSlug = PROBLEMS[CURRENT_INDEX - 1].slug;
-            window.location.href = `solution.html?slug=${prevSlug}`;
-        }
+        const prevSlug = PROBLEMS[CURRENT_INDEX - 1].slug;
+        window.location.href = `solution.html?slug=${prevSlug}`;
     };
 
     nextBtn.onclick = () => {
-        if (CURRENT_INDEX < PROBLEMS.length - 1) {
-            const nextSlug = PROBLEMS[CURRENT_INDEX + 1].slug;
-            window.location.href = `solution.html?slug=${nextSlug}`;
-        }
+        const nextSlug = PROBLEMS[CURRENT_INDEX + 1].slug;
+        window.location.href = `solution.html?slug=${nextSlug}`;
     };
 }
 </script>
