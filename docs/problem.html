@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="assets/css/code.css">
 
     <style>
+        /* تحسينات خاصة بالسايدبار لهذه الصفحة */
         @media (min-width: 992px) {
             body { padding-left: 280px; }
             #sidebar { left: 0; width: 280px; }
@@ -22,12 +23,12 @@
         @media (max-width: 991px) {
             #sidebar { display: none; } 
         }
-        /* تحسين شكل القائمة الجانبية */
+        /* تنسيق العنصر النشط في القائمة */
         .list-group-item.active {
             background-color: #0d6efd;
             border-color: #0d6efd;
         }
-        /* إخفاء العناصر عند عدم وجود مسألة */
+        /* إخفاء العناصر عند الحاجة */
         .hidden { display: none !important; }
     </style>
 </head>
@@ -38,7 +39,7 @@
         <div class="container-fluid">
             <a class="navbar-brand" href="index.html">Coding Hub</a>
             <div class="d-flex align-items-center gap-2 ms-auto">
-                <a href="problems.html" class="btn btn-sm btn-outline-light d-lg-none">View List</a>
+                <a href="problems.html" class="btn btn-sm btn-outline-light d-lg-none">List</a>
                 <button class="btn btn-light btn-sm" onclick="toggleTheme()">🌙 / ☀️</button>
             </div>
         </div>
@@ -46,14 +47,14 @@
 
     <div id="sidebar" class="bg-white border-end shadow-sm" style="position: fixed; top: 0; bottom: 0; overflow-y: auto; padding-top: 60px; z-index: 1000;">
         <div class="p-3">
-            <h6 class="text-uppercase text-muted fw-bold mb-3 ps-2" style="font-size: 0.8rem;">Problems Explorer</h6>
+            <h6 class="text-uppercase text-muted fw-bold mb-3 ps-2" style="font-size: 0.8rem;">Problem Explorer</h6>
             
-            <input type="text" id="sidebarFilter" class="form-control form-control-sm mb-3" placeholder="Filter problems...">
+            <input type="text" id="sidebarFilter" class="form-control form-control-sm mb-3" placeholder="Filter list...">
             
             <div id="sidebarList" class="list-group list-group-flush">
                 <div class="text-center text-muted small py-4">
                     <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
-                    <div class="mt-2">Loading Index...</div>
+                    <div class="mt-2">Loading problems...</div>
                 </div>
             </div>
         </div>
@@ -66,24 +67,23 @@
                 <h2 id="problemTitleDisplay" class="fw-bold mb-2">Loading...</h2>
                 <span id="difficultyBadge" class="badge bg-secondary">...</span>
             </div>
-            <button id="favButton" class="fav-btn fs-3" title="Add to Favorites">★</button>
+            <button id="favButton" class="fav-btn" title="Add to Favorites">★</button>
         </div>
 
         <div id="problemContent">
             <div class="text-center py-5 text-muted">
                 <div class="display-1 mb-3">👈</div>
                 <h3>Select a problem to start coding</h3>
-                <p>Choose a challenge from the sidebar list.</p>
-                <a href="problems.html" class="btn btn-primary mt-3">Browse All Problems</a>
+                <p>Choose a challenge from the sidebar list to view details.</p>
             </div>
         </div>
 
         <div id="actionArea" class="hidden">
             <div class="card bg-white border mt-5 shadow-sm">
                 <div class="card-body d-flex justify-content-between align-items-center flex-wrap gap-2">
-                    <span class="text-muted fw-medium">Ready to check your answer?</span>
+                    <span class="text-muted fw-medium">Stuck? Check the solution.</span>
                     <a id="solutionLink" href="#" class="btn btn-success px-4">
-                        View Solution & Code <span class="ms-1">→</span>
+                        View Solution <span class="ms-1">→</span>
                     </a>
                 </div>
             </div>
@@ -113,15 +113,16 @@
         const problemPath = urlParams.get('id');
 
         async function init() {
-            // 1. Load Sidebar FIRST (دائماً حمل القائمة الجانبية)
+            // 1. تحميل القائمة الجانبية أولاً (دائماً)
             await loadIndex();
 
-            // 2. If URL has ID, load content. Otherwise, stay on "Empty State".
+            // 2. إذا وجد رابط مسألة، نقوم بتحميلها. وإلا، نبقى في شاشة الترحيب.
             if (problemPath) {
                 loadContent();
             }
         }
 
+        // دالة تحميل الفهرس وبناء القائمة
         async function loadIndex() {
             try {
                 const res = await fetch(CONFIG.PROBLEMS_INDEX);
@@ -141,7 +142,7 @@
 
                 renderSidebar(PROBLEMS);
                 
-                // Setup Filter
+                // تفعيل فلتر البحث في السايدبار
                 document.getElementById("sidebarFilter").addEventListener("input", (e) => {
                     const term = e.target.value.toLowerCase();
                     const filtered = PROBLEMS.filter(p => p.title.toLowerCase().includes(term));
@@ -153,6 +154,7 @@
             }
         }
 
+        // رسم القائمة الجانبية
         function renderSidebar(list) {
             const sidebar = document.getElementById("sidebarList");
             if(list.length === 0) {
@@ -161,37 +163,37 @@
             }
             
             sidebar.innerHTML = list.map(p => {
-                const activeClass = (p.link === problemPath) ? "active text-white" : "text-dark";
-                const difficultyColor = p.difficulty === 'easy' ? 'text-success' : p.difficulty === 'medium' ? 'text-warning' : 'text-danger';
+                // تمييز المسألة الحالية
+                const isActive = (p.link === problemPath);
+                const activeClass = isActive ? "active text-white" : "text-dark";
                 
-                // If active, badge is white, else badge is colored
-                const badgeClass = (p.link === problemPath) ? "text-white-50" : difficultyColor;
+                // ألوان الصعوبة (نقطة صغيرة)
+                const diffColor = p.difficulty === 'easy' ? 'text-success' : p.difficulty === 'medium' ? 'text-warning' : 'text-danger';
+                const dotClass = isActive ? "text-white-50" : diffColor;
 
                 return `
                 <a href="problem.html?id=${p.link}" class="list-group-item list-group-item-action border-0 rounded mb-1 ${activeClass}">
                     <div class="d-flex justify-content-between align-items-center">
                         <span class="small fw-medium text-truncate" style="max-width: 180px;">${p.title}</span>
-                        <span style="font-size: 10px;" class="${badgeClass}">●</span>
+                        <span style="font-size: 12px;" class="${dotClass}">●</span>
                     </div>
                 </a>`;
             }).join("");
         }
 
+        // دالة تحميل محتوى المسألة
         async function loadContent() {
-            // Show UI Elements
+            // إظهار العناصر المخفية
             document.getElementById("problemHeader").classList.remove("hidden");
             document.getElementById("actionArea").classList.remove("hidden");
             
-            // Update Logic for Paths
             const fetchPath = "../" + problemPath;
             
-            // Find Current Problem Data
+            // تحديد المسألة الحالية
             CURRENT_INDEX = PROBLEMS.findIndex(p => p.link === problemPath);
-            
-            // Update Navigation Buttons State
             updateNavButtons();
 
-            // If found in index, update Header UI immediately
+            // تحديث العنوان فوراً من الفهرس (أسرع من انتظار الملف)
             if(CURRENT_INDEX !== -1) {
                 const p = PROBLEMS[CURRENT_INDEX];
                 document.getElementById("problemTitleDisplay").innerText = p.title;
@@ -204,7 +206,7 @@
                 setupFavButtonInPage(p);
             }
 
-            // Fetch Markdown
+            // جلب ملف الماركدون
             try {
                 const res = await fetch(fetchPath);
                 if(!res.ok) throw new Error("Not Found");
@@ -212,7 +214,7 @@
                 
                 document.getElementById("problemContent").innerHTML = marked.parse(md);
                 document.querySelectorAll("pre code").forEach(el => hljs.highlightElement(el));
-                addCopyButtons(); // Helper to add copy buttons
+                addCopyButtons(); 
 
             } catch (e) {
                 document.getElementById("problemContent").innerHTML = `
@@ -223,6 +225,7 @@
             }
         }
 
+        // تحديث أزرار التنقل
         function updateNavButtons() {
             const prevBtn = document.getElementById("prevBtn");
             const nextBtn = document.getElementById("nextBtn");
@@ -238,6 +241,7 @@
             }
         }
 
+        // إضافة أزرار النسخ
         function addCopyButtons() {
             document.querySelectorAll("pre").forEach(pre => {
                 const btn = document.createElement("button");
@@ -253,9 +257,14 @@
             });
         }
 
+        // إعداد زر المفضلة
         function setupFavButtonInPage(problemObj) {
             const btn = document.getElementById("favButton");
+            // إعادة تعيين الحالة
+            btn.classList.remove("active");
+            
             if (isFavorite(problemObj.slug)) btn.classList.add("active");
+            
             btn.onclick = () => {
                 toggleFavorite(problemObj);
                 btn.classList.toggle("active");
