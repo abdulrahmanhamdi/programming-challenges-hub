@@ -1,0 +1,20 @@
+name: "Improve Existing Problem or Solution"
+description: "Suggest an improvement for an existing file"
+title: "[Improvement] "
+labels: ["enhancement"]
+body:
+  - type: input
+    id: target_file
+    attributes:
+      label: Target File
+      placeholder: e.g. problems/easy/reverse-string.md
+    validations:
+      required: true
+
+  - type: textarea
+    id: improvements
+    attributes:
+      label: Your Suggestion
+      placeholder: Describe what you want to improve
+    validations:
+      required: true

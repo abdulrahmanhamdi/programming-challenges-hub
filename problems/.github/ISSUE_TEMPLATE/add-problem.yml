@@ -1,0 +1,31 @@
+name: "Add New Problem"
+description: "Request to add a new programming problem"
+title: "[Problem] "
+labels: ["new problem"]
+body:
+  - type: input
+    id: problem_title
+    attributes:
+      label: Problem Title
+      placeholder: e.g. Reverse String
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Problem Description
+      placeholder: Add a description here
+    validations:
+      required: true
+
+  - type: dropdown
+    id: difficulty
+    attributes:
+      label: Difficulty
+      options:
+        - easy
+        - medium
+        - hard
+    validations:
+      required: true

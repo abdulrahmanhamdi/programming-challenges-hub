@@ -1,0 +1,26 @@
+name: "Add New Solution"
+description: "Submit a solution for an existing problem"
+title: "[Solution] "
+labels: ["new solution"]
+body:
+  - type: input
+    id: problem_name
+    attributes:
+      label: Problem Name
+      placeholder: e.g. reverse-string
+    validations:
+      required: true
+
+  - type: input
+    id: language
+    attributes:
+      label: Programming Language
+      placeholder: python / javascript / java / cpp
+    validations:
+      required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      placeholder: Add any explanation or details
