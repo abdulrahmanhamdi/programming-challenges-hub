@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Solutions | Programming Challenges Hub</title>
 
-    <!-- Bootstrap CDN -->
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
@@ -24,26 +24,44 @@
 </head>
 <body class="bg-light">
 
+<!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Solutions</a>
-    <button class="btn btn-light" onclick="toggleTheme()">🌙 / ☀️</button>
-  </div>
+    <div class="container-fluid">
+
+        <a class="navbar-brand" href="index.html">Coding Hub</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="problems.html">Problems</a></li>
+                <li class="nav-item"><a class="nav-link active" href="solutions.html">Solutions</a></li>
+                <li class="nav-item"><a class="nav-link" href="search.html">Search</a></li>
+            </ul>
+
+            <input id="globalSearchInput" 
+                class="form-control me-2 w-25" 
+                placeholder="Search problems..." />
+
+            <button class="btn btn-light" onclick="toggleTheme()">🌙 / ☀️</button>
+        </div>
+    </div>
 </nav>
 
 <div class="container mt-4">
 
     <h2 class="mb-3 text-center">All Solutions</h2>
 
-    <!-- Search Bar -->
-    <div class="input-group mb-4">
-        <input type="text" id="searchInput" class="form-control" placeholder="Search problems...">
-    </div>
-
     <div id="solutionsList" class="row row-cols-1 row-cols-md-2 g-4">
-        <!-- Filled Automatically by JS using PROBLEMS_INDEX.md -->
+        <!-- Filled Automatically by JS -->
     </div>
 </div>
+
+<script src="assets/js/site.js"></script>
 
 <script>
 // Theme Toggle
@@ -51,7 +69,7 @@ function toggleTheme() {
     document.body.classList.toggle("dark-mode");
 }
 
-// Auto-fetch PROBLEMS_INDEX.md and parse
+// Auto-load problems, then convert them into solution cards
 fetch('../PROBLEMS_INDEX.md')
     .then(res => res.text())
     .then(text => {
@@ -63,14 +81,29 @@ fetch('../PROBLEMS_INDEX.md')
                 const parts = line.split("|");
                 const title = parts[1].trim();
                 const difficulty = parts[2].trim();
-                const link = parts[3].match(/\((.*)\)/)[1];
+                const problemLink = parts[3].match(/\((.*)\)/)[1];
+
+                const solutionLink = problemLink.replace("problems/", "solutions/").replace(".md", "");
 
                 const card = `
                     <div class="col">
                         <div class="card p-3 shadow-sm">
                             <h5>${title}</h5>
                             <p><strong>Difficulty:</strong> ${difficulty}</p>
-                            <a href="../${link}" target="_blank">View Problem</a>
+                            
+                            <a href="../${problemLink}" target="_blank">Open Problem</a><br>
+                            <a class="text-success" href="../${solutionLink}.py" target="_blank">
+                                Python Solution
+                            </a><br>
+                            <a class="text-warning" href="../${solutionLink}.js" target="_blank">
+                                JavaScript Solution
+                            </a><br>
+                            <a class="text-danger" href="../${solutionLink}.java" target="_blank">
+                                Java Solution
+                            </a><br>
+                            <a class="text-primary" href="../${solutionLink}.cpp" target="_blank">
+                                C++ Solution
+                            </a>
                         </div>
                     </div>`;
 
@@ -79,17 +112,8 @@ fetch('../PROBLEMS_INDEX.md')
         });
     });
 
-// Search Filter
-const searchInput = document.getElementById("searchInput");
-searchInput.addEventListener("keyup", function() {
-    let filter = searchInput.value.toLowerCase();
-    let cards = document.querySelectorAll('#solutionsList .col');
-
-    cards.forEach(card => {
-        let text = card.innerText.toLowerCase();
-        card.style.display = text.includes(filter) ? "block" : "none";
-    });
-});
+// Activate global search
+setupSearch("globalSearchInput", "solutionsList");
 </script>
 
 </body>

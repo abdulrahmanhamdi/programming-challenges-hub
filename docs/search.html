@@ -10,11 +10,29 @@
 </head>
 <body class="bg-light">
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="index.html">Programming Challenges Hub</a>
-    <input id="globalSearchInput" class="form-control w-25" placeholder="Search problems..." />
-  </div>
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+
+        <a class="navbar-brand" href="index.html">Coding Hub</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="problems.html">Problems</a></li>
+                <li class="nav-item"><a class="nav-link" href="solutions.html">Solutions</a></li>
+                <li class="nav-item"><a class="nav-link active" href="search.html">Search</a></li>
+            </ul>
+
+            <input id="globalSearchInput" class="form-control me-2 w-25" placeholder="Search problems..." />
+            <button class="btn btn-light" onclick="toggleTheme()">🌙 / ☀️</button>
+        </div>
+    </div>
 </nav>
 
 <div class="container mt-4">
@@ -23,9 +41,11 @@
 </div>
 
 <script src="assets/js/site.js"></script>
+
 <script>
-// Activate global search engine for this page
 setupSearch('globalSearchInput', 'globalResults');
+
+function toggleTheme(){ document.body.classList.toggle("dark-mode"); }
 </script>
 
 </body>
