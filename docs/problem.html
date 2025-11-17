@@ -6,25 +6,29 @@
     <title>Problem Viewer | Coding Hub</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css">
 
     <link rel="stylesheet" href="assets/css/global.css">
     <link rel="stylesheet" href="assets/css/theme.css">
     <link rel="stylesheet" href="assets/css/components.css">
     <link rel="stylesheet" href="assets/css/markdown.css">
-    <link rel="stylesheet" href="assets/css/code.css"> 
+    <link rel="stylesheet" href="assets/css/code.css">
 
     <style>
-        /* Page Specific: Adjust for Sidebar */
         @media (min-width: 992px) {
-            body { padding-left: 260px; }
-            #sidebar { left: 0; }
+            body { padding-left: 280px; }
+            #sidebar { left: 0; width: 280px; }
         }
-        /* Mobile Sidebar hidden by default */
         @media (max-width: 991px) {
             #sidebar { display: none; } 
         }
+        /* تحسين شكل القائمة الجانبية */
+        .list-group-item.active {
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+        }
+        /* إخفاء العناصر عند عدم وجود مسألة */
+        .hidden { display: none !important; }
     </style>
 </head>
 
@@ -33,26 +37,31 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
         <div class="container-fluid">
             <a class="navbar-brand" href="index.html">Coding Hub</a>
-            
             <div class="d-flex align-items-center gap-2 ms-auto">
-                <a href="problems.html" class="btn btn-sm btn-outline-light d-lg-none">List</a>
+                <a href="problems.html" class="btn btn-sm btn-outline-light d-lg-none">View List</a>
                 <button class="btn btn-light btn-sm" onclick="toggleTheme()">🌙 / ☀️</button>
             </div>
         </div>
     </nav>
 
-    <div id="sidebar" class="bg-white border-end" style="position: fixed; top: 0; bottom: 0; width: 260px; overflow-y: auto; padding-top: 60px; z-index: 1000;">
+    <div id="sidebar" class="bg-white border-end shadow-sm" style="position: fixed; top: 0; bottom: 0; overflow-y: auto; padding-top: 60px; z-index: 1000;">
         <div class="p-3">
-            <h6 class="text-uppercase text-muted fw-bold mb-3" style="font-size: 0.8rem;">Problem List</h6>
+            <h6 class="text-uppercase text-muted fw-bold mb-3 ps-2" style="font-size: 0.8rem;">Problems Explorer</h6>
+            
+            <input type="text" id="sidebarFilter" class="form-control form-control-sm mb-3" placeholder="Filter problems...">
+            
             <div id="sidebarList" class="list-group list-group-flush">
-                <div class="text-center text-muted small">Loading...</div>
+                <div class="text-center text-muted small py-4">
+                    <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+                    <div class="mt-2">Loading Index...</div>
+                </div>
             </div>
         </div>
     </div>
 
     <div class="container mt-4 mb-5 animate-fade" style="max-width: 900px;">
 
-        <div class="d-flex justify-content-between align-items-start border-bottom pb-3 mb-4">
+        <div id="problemHeader" class="d-flex justify-content-between align-items-start border-bottom pb-3 mb-4 hidden">
             <div>
                 <h2 id="problemTitleDisplay" class="fw-bold mb-2">Loading...</h2>
                 <span id="difficultyBadge" class="badge bg-secondary">...</span>
@@ -60,22 +69,31 @@
             <button id="favButton" class="fav-btn fs-3" title="Add to Favorites">★</button>
         </div>
 
-        <div id="problemContent"></div>
-
-        <div class="card bg-light border-0 mt-5">
-            <div class="card-body d-flex justify-content-between align-items-center">
-                <span class="text-muted">Stuck? Check the solution.</span>
-                <a id="solutionLink" href="#" class="btn btn-success">
-                    View Solution <span class="ms-1">→</span>
-                </a>
+        <div id="problemContent">
+            <div class="text-center py-5 text-muted">
+                <div class="display-1 mb-3">👈</div>
+                <h3>Select a problem to start coding</h3>
+                <p>Choose a challenge from the sidebar list.</p>
+                <a href="problems.html" class="btn btn-primary mt-3">Browse All Problems</a>
             </div>
         </div>
 
-        <hr class="my-5">
+        <div id="actionArea" class="hidden">
+            <div class="card bg-white border mt-5 shadow-sm">
+                <div class="card-body d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <span class="text-muted fw-medium">Ready to check your answer?</span>
+                    <a id="solutionLink" href="#" class="btn btn-success px-4">
+                        View Solution & Code <span class="ms-1">→</span>
+                    </a>
+                </div>
+            </div>
 
-        <div class="d-flex justify-content-between">
-            <button id="prevBtn" class="btn btn-outline-secondary">← Previous Problem</button>
-            <button id="nextBtn" class="btn btn-outline-secondary">Next Problem →</button>
+            <hr class="my-5">
+
+            <div class="d-flex justify-content-between">
+                <button id="prevBtn" class="btn btn-outline-secondary px-4">← Previous</button>
+                <button id="nextBtn" class="btn btn-outline-secondary px-4">Next →</button>
+            </div>
         </div>
 
     </div>
@@ -89,166 +107,162 @@
     <script src="assets/js/favorites.js"></script>
 
     <script>
-        // Global Variables
         let PROBLEMS = [];
         let CURRENT_INDEX = -1;
-
-        // Get ID from URL (e.g. "problems/easy/two-sum.md")
         const urlParams = new URLSearchParams(window.location.search);
         const problemPath = urlParams.get('id');
 
-        // 1. Initialize Page
         async function init() {
-            if (!problemPath) {
-                document.getElementById("problemContent").innerHTML = `<div class="alert alert-warning">No problem selected. <a href="problems.html">Go back to list</a>.</div>`;
-                document.getElementById("problemTitleDisplay").innerText = "Not Found";
+            // 1. Load Sidebar FIRST (دائماً حمل القائمة الجانبية)
+            await loadIndex();
+
+            // 2. If URL has ID, load content. Otherwise, stay on "Empty State".
+            if (problemPath) {
+                loadContent();
+            }
+        }
+
+        async function loadIndex() {
+            try {
+                const res = await fetch(CONFIG.PROBLEMS_INDEX);
+                const text = await res.text();
+                const lines = text.split("\n").filter(l => l.startsWith("| ") && l.includes(".md"));
+                
+                PROBLEMS = lines.map((line, index) => {
+                    const parts = line.split("|");
+                    return {
+                        index: index,
+                        title: parts[1].trim(),
+                        difficulty: parts[2].trim().toLowerCase(),
+                        link: parts[3].match(/\((.*)\)/)[1],
+                        slug: parts[3].match(/\((.*)\)/)[1].split("/").pop().replace(".md", "")
+                    };
+                });
+
+                renderSidebar(PROBLEMS);
+                
+                // Setup Filter
+                document.getElementById("sidebarFilter").addEventListener("input", (e) => {
+                    const term = e.target.value.toLowerCase();
+                    const filtered = PROBLEMS.filter(p => p.title.toLowerCase().includes(term));
+                    renderSidebar(filtered);
+                });
+
+            } catch (err) {
+                document.getElementById("sidebarList").innerHTML = `<div class="text-danger small p-3">Error loading index.</div>`;
+            }
+        }
+
+        function renderSidebar(list) {
+            const sidebar = document.getElementById("sidebarList");
+            if(list.length === 0) {
+                sidebar.innerHTML = "<div class='text-muted small p-3'>No problems found.</div>";
                 return;
             }
-
-            // Fetch Index (for Sidebar & Nav) AND Problem Content
-            try {
-                await Promise.all([loadIndex(), loadContent()]);
-            } catch (error) {
-                console.error(error);
-            }
-        }
-
-        // 2. Load Problems Index (Sidebar + Prev/Next Logic)
-        async function loadIndex() {
-            const res = await fetch(CONFIG.PROBLEMS_INDEX); // Uses config.js path
-            const text = await res.text();
             
-            const lines = text.split("\n").filter(l => l.startsWith("| ") && l.includes(".md"));
-            
-            PROBLEMS = lines.map((line, index) => {
-                const parts = line.split("|");
-                return {
-                    index: index,
-                    title: parts[1].trim(),
-                    difficulty: parts[2].trim().toLowerCase(),
-                    link: parts[3].match(/\((.*)\)/)[1], // problems/easy/xyz.md
-                    slug: parts[3].match(/\((.*)\)/)[1].split("/").pop().replace(".md", "")
-                };
-            });
-
-            // Render Sidebar
-            const sidebar = document.getElementById("sidebarList");
-            sidebar.innerHTML = "";
-            PROBLEMS.forEach(p => {
-                const activeClass = (p.link === problemPath) ? "active" : "";
-                sidebar.innerHTML += `
-                    <a href="problem.html?id=${p.link}" class="list-group-item list-group-item-action ${activeClass} small py-2">
-                        ${p.title}
-                    </a>`;
-            });
-
-            // Setup Prev/Next
-            CURRENT_INDEX = PROBLEMS.findIndex(p => p.link === problemPath);
-            updateNavButtons();
-            
-            // Setup Solution Link
-            if (CURRENT_INDEX !== -1) {
-                const currentProb = PROBLEMS[CURRENT_INDEX];
-                document.getElementById("solutionLink").href = `solution.html?slug=${currentProb.slug}`;
+            sidebar.innerHTML = list.map(p => {
+                const activeClass = (p.link === problemPath) ? "active text-white" : "text-dark";
+                const difficultyColor = p.difficulty === 'easy' ? 'text-success' : p.difficulty === 'medium' ? 'text-warning' : 'text-danger';
                 
-                // Update Badge
-                const badge = document.getElementById("difficultyBadge");
-                badge.innerText = currentProb.difficulty;
-                badge.className = `badge ${currentProb.difficulty === 'easy' ? 'bg-success' : currentProb.difficulty === 'medium' ? 'bg-warning text-dark' : 'bg-danger'}`;
+                // If active, badge is white, else badge is colored
+                const badgeClass = (p.link === problemPath) ? "text-white-50" : difficultyColor;
 
-                // Setup Favorites
-                setupFavButtonInPage(currentProb);
-            }
+                return `
+                <a href="problem.html?id=${p.link}" class="list-group-item list-group-item-action border-0 rounded mb-1 ${activeClass}">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="small fw-medium text-truncate" style="max-width: 180px;">${p.title}</span>
+                        <span style="font-size: 10px;" class="${badgeClass}">●</span>
+                    </div>
+                </a>`;
+            }).join("");
         }
 
-        // 3. Load Markdown Content
         async function loadContent() {
-            // problemPath is like "problems/easy/file.md". We are in "docs/".
-            // So we need "../problems/easy/file.md"
+            // Show UI Elements
+            document.getElementById("problemHeader").classList.remove("hidden");
+            document.getElementById("actionArea").classList.remove("hidden");
+            
+            // Update Logic for Paths
             const fetchPath = "../" + problemPath;
+            
+            // Find Current Problem Data
+            CURRENT_INDEX = PROBLEMS.findIndex(p => p.link === problemPath);
+            
+            // Update Navigation Buttons State
+            updateNavButtons();
 
+            // If found in index, update Header UI immediately
+            if(CURRENT_INDEX !== -1) {
+                const p = PROBLEMS[CURRENT_INDEX];
+                document.getElementById("problemTitleDisplay").innerText = p.title;
+                document.getElementById("solutionLink").href = `solution.html?slug=${p.slug}`;
+                
+                const badge = document.getElementById("difficultyBadge");
+                badge.innerText = p.difficulty.toUpperCase();
+                badge.className = `badge ${p.difficulty === 'easy' ? 'bg-success' : p.difficulty === 'medium' ? 'bg-warning text-dark' : 'bg-danger'}`;
+                
+                setupFavButtonInPage(p);
+            }
+
+            // Fetch Markdown
             try {
                 const res = await fetch(fetchPath);
-                if (!res.ok) throw new Error("File not found");
+                if(!res.ok) throw new Error("Not Found");
                 const md = await res.text();
-
-                // Render Markdown
-                const html = marked.parse(md);
-                const contentDiv = document.getElementById("problemContent");
-                contentDiv.innerHTML = html;
-
-                // Extract Title from MD (First H1)
-                const titleMatch = md.match(/^# (.*$)/m);
-                if (titleMatch) {
-                    document.getElementById("problemTitleDisplay").innerText = titleMatch[1];
-                }
-
-                // Highlight Code
+                
+                document.getElementById("problemContent").innerHTML = marked.parse(md);
                 document.querySelectorAll("pre code").forEach(el => hljs.highlightElement(el));
-
-                // Add Copy Buttons
-                addCopyButtons();
+                addCopyButtons(); // Helper to add copy buttons
 
             } catch (e) {
-                document.getElementById("problemContent").innerHTML = `<div class="alert alert-danger">Error loading problem file: ${e.message}</div>`;
+                document.getElementById("problemContent").innerHTML = `
+                    <div class="alert alert-danger text-center mt-5">
+                        <h4>Problem File Not Found</h4>
+                        <p>Could not load: ${fetchPath}</p>
+                    </div>`;
             }
         }
 
-        // 4. Navigation Logic
         function updateNavButtons() {
             const prevBtn = document.getElementById("prevBtn");
             const nextBtn = document.getElementById("nextBtn");
 
             prevBtn.disabled = (CURRENT_INDEX <= 0);
-            nextBtn.disabled = (CURRENT_INDEX >= PROBLEMS.length - 1);
+            nextBtn.disabled = (CURRENT_INDEX === -1 || CURRENT_INDEX >= PROBLEMS.length - 1);
 
-            prevBtn.onclick = () => location.href = `problem.html?id=${PROBLEMS[CURRENT_INDEX - 1].link}`;
-            nextBtn.onclick = () => location.href = `problem.html?id=${PROBLEMS[CURRENT_INDEX + 1].link}`;
+            if(!prevBtn.disabled) {
+                prevBtn.onclick = () => location.href = `problem.html?id=${PROBLEMS[CURRENT_INDEX - 1].link}`;
+            }
+            if(!nextBtn.disabled) {
+                nextBtn.onclick = () => location.href = `problem.html?id=${PROBLEMS[CURRENT_INDEX + 1].link}`;
+            }
         }
 
-        // 5. Helper: Add Copy Buttons
         function addCopyButtons() {
             document.querySelectorAll("pre").forEach(pre => {
-                // Wrapper for positioning
-                const wrapper = document.createElement("div");
-                wrapper.style.position = "relative";
-                pre.parentNode.insertBefore(wrapper, pre);
-                wrapper.appendChild(pre);
-
                 const btn = document.createElement("button");
-                btn.className = "copy-btn"; // Defined in components.css or code.css
+                btn.className = "copy-btn";
                 btn.innerText = "Copy";
-                btn.style.position = "absolute";
-                btn.style.top = "5px";
-                btn.style.right = "5px";
-                
                 btn.onclick = () => {
                     navigator.clipboard.writeText(pre.innerText);
                     btn.innerText = "Copied!";
                     setTimeout(() => btn.innerText = "Copy", 1500);
                 };
-                wrapper.appendChild(btn);
+                pre.style.position = "relative";
+                pre.appendChild(btn);
             });
         }
 
-        // 6. Helper: Favorites
         function setupFavButtonInPage(problemObj) {
             const btn = document.getElementById("favButton");
-            
-            // Check status
-            if (isFavorite(problemObj.slug)) {
-                btn.classList.add("active");
-            }
-
+            if (isFavorite(problemObj.slug)) btn.classList.add("active");
             btn.onclick = () => {
-                toggleFavorite(problemObj); // function from favorites.js
+                toggleFavorite(problemObj);
                 btn.classList.toggle("active");
             };
         }
 
-        // Start
         init();
-
     </script>
 </body>
 </html>
