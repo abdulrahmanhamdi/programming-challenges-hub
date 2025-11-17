@@ -1,7 +1,6 @@
 def longest_common_prefix(strs):
     if not strs:
         return ""
-
     prefix = strs[0]
     for word in strs[1:]:
         while not word.startswith(prefix):
