@@ -89,3 +89,35 @@ body.dark-mode .list-group-item {
 body.dark-mode .list-group-item.text-dark {
     color: var(--text-main) !important;
 }
+/* =========================================
+   FIX BUTTON COLORS IN DARK MODE 
+   (Fix filter button colors in dark mode)
+   ========================================= */
+
+/* 1. Fix Medium button (yellow) */
+body.dark-mode .btn-outline-warning {
+    color: #fcd34d; /* Light yellow text */
+    border-color: #fcd34d;
+}
+body.dark-mode .btn-outline-warning:hover,
+body.dark-mode .btn-warning {
+    background-color: #fcd34d;
+    color: #000 !important; /* Black text when active for readability */
+}
+
+/* 2. Fix Show All button (gray) */
+body.dark-mode .btn-secondary,
+body.dark-mode .btn-outline-secondary {
+    color: #e2e8f0; /* Off-white/grayish text */
+    border-color: #475569;
+}
+body.dark-mode .btn-secondary.active,
+body.dark-mode .btn-secondary:hover {
+    background-color: #475569;
+    border-color: #64748b;
+}
+
+/* 3. Remove text-dark effect which breaks dark mode */
+body.dark-mode .text-dark {
+    color: var(--text-main) !important;
+}
