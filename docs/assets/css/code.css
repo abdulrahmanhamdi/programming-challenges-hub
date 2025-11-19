@@ -97,26 +97,34 @@ body.dark-mode li code {
 }
 
 /* ==================================================
-    OPTIONAL — LINE NUMBERS (Off by default)
-    (Enable by uncommenting)
+   CODE EDITOR (Independent Theme)
+   — Always same theme in Light & Dark mode —
 ================================================== */
 
-/*
-pre {
-    counter-reset: line;
+/* Code container */
+pre, code {
+    background-color: #0d1117 !important;  /* GitHub Dark */
+    color: #c9d1d9 !important;             /* Default font color */
+    font-family: "Fira Code", Consolas, monospace;
+    font-size: 15px;
+    line-height: 1.5;
+    white-space: pre;
 }
 
-code.hljs > span {
-    counter-increment: line;
-}
+/* Highlight.js tokens */
+.hljs-keyword      { color: #ff7b72 !important; }
+.hljs-string       { color: #a5d6ff !important; }
+.hljs-number       { color: #f2cc60 !important; }
+.hljs-comment      { color: #8b949e !important; font-style: italic; }
+.hljs-function     { color: #d2a8ff !important; }
+.hljs-title        { color: #d2a8ff !important; }
+.hljs-built_in     { color: #ffa657 !important; }
+.hljs-literal      { color: #79c0ff !important; }
+.hljs-operator     { color: #ff7b72 !important; }
 
-code.hljs > span::before {
-    content: counter(line);
-    display: inline-block;
-    width: 32px;
-    margin-right: 16px;
-    text-align: right;
-    color: #6e7681;
-    user-select: none;
+/* Prevent ANY dark-mode override */
+body.dark-mode pre,
+body.dark-mode code {
+    background-color: #0d1117 !important;
+    color: #c9d1d9 !important;
 }
-*/
