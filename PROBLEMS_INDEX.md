@@ -1,7 +1,10 @@
 # 📘 Problems Index
+
 Automatically generated. Do not edit manually.
 
+
 ## 🔹 Easy
+
 | Problem | Difficulty | Path |
 |---------|------------|------|
 | Count Vowels | عدّ الحركات | easy | [count-vowels.md](problems/easy/count-vowels.md) |
@@ -10,7 +13,9 @@ Automatically generated. Do not edit manually.
 | Reverse String | عكس النص | easy | [reverse-string.md](problems/easy/reverse-string.md) |
 | Sum of Digits | مجموع أرقام العدد | easy | [sum-of-digits.md](problems/easy/sum-of-digits.md) |
 
+
 ## 🔹 Medium
+
 | Problem | Difficulty | Path |
 |---------|------------|------|
 | Balanced Parentheses | أقواس متوازنة | medium | [balanced-parentheses.md](problems/medium/balanced-parentheses.md) |
@@ -23,7 +28,9 @@ Automatically generated. Do not edit manually.
 | Second Largest Number | ثاني أكبر رقم | medium | [second-largest.md](problems/medium/second-largest.md) |
 | Two Sum | مجموع رقمين | medium | [two-sum.md](problems/medium/two-sum.md) |
 
+
 ## 🔹 Hard
+
 | Problem | Difficulty | Path |
 |---------|------------|------|
 | Edit Distance | مسافة التعديل | hard | [edit-distance.md](problems/hard/edit-distance.md) |

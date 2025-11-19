@@ -87,12 +87,29 @@
             ALL_PROBLEMS = []; // Reset
 
             lines.forEach((line, index) => {
-                if (line.startsWith("| ") && line.includes(".md")) {
+                // التحقق من أن السطر هو سطر جدول ويحتوي على رابط
+                if (line.trim().startsWith("|") && !line.includes("---") && line.includes("](") ) {
+                    
                     const parts = line.split("|");
+                    
+                    // التأكد من وجود أعمدة كافية لتجنب الأخطاء
+                    if (parts.length < 4) return;
+
                     const title = parts[1].trim();
                     const difficulty = parts[2].trim().toLowerCase();
-                    const link = parts[3].match(/\((.*)\)/)[1]; // e.g. problems/easy/file.md
+                    const rawLink = parts[3].trim();
+
+                    // استخراج الرابط بشكل آمن
+                    const match = rawLink.match(/\((.*)\)/);
+                    
+                    // إذا لم يتم العثور على رابط، تخطى هذا السطر ولا توقف الموقع
+                    if (!match) return; 
+                    
+                    const link = match[1]; // المسار الكامل
                     const slug = link.split("/").pop().replace(".md", "");
+
+                    // تجاهل سطور العناوين (Header)
+                    if (title.includes("Problem") || difficulty.includes("Difficulty")) return;
 
                     ALL_PROBLEMS.push({
                         title,
@@ -107,15 +124,21 @@
             renderProblems(ALL_PROBLEMS);
         })
         .catch(err => {
-            document.getElementById("problemsList").innerHTML = `<div class="alert alert-danger">Error loading index: ${err.message}</div>`;
+            console.error(err); 
+            document.getElementById("problemsList").innerHTML = `
+                <div class="alert alert-danger text-center">
+                    Error processing index file.<br>
+                    <small class="text-muted">Check console for details.</small>
+                </div>`;
         });
 
 
     // 2. Render Function
     function renderProblems(list) {
         const container = document.getElementById("problemsList");
+        
         if(list.length === 0) {
-            container.innerHTML = "<p class='text-center text-muted'>No problems found.</p>";
+            container.innerHTML = "<p class='text-center text-muted py-5'>No problems found in the index.</p>";
             return;
         }
 
@@ -146,18 +169,24 @@
     function filterDifficulty(level, btnElement) {
         // UI Button State
         document.querySelectorAll('.btn').forEach(b => {
-            // Remove active from filter buttons only (simplistic approach)
             if(b.onclick && b.onclick.toString().includes('filterDifficulty')) {
                 b.classList.remove('active');
-                b.classList.add('btn-outline-' + (b.innerText === 'Medium' ? 'warning' : b.innerText === 'Easy' ? 'success' : b.innerText === 'Hard' ? 'danger' : 'secondary'));
-                b.classList.remove('btn-' + (b.innerText === 'Medium' ? 'warning' : b.innerText === 'Easy' ? 'success' : b.innerText === 'Hard' ? 'danger' : 'secondary'));
+                // إعادة الألوان الافتراضية للأزرار غير النشطة
+                const text = b.innerText.toLowerCase();
+                if(text === 'show all') b.className = 'btn btn-secondary';
+                else if(text === 'easy') b.className = 'btn btn-outline-success';
+                else if(text === 'medium') b.className = 'btn btn-outline-warning';
+                else if(text === 'hard') b.className = 'btn btn-outline-danger';
             }
         });
         
         // Activate clicked button
         btnElement.classList.add('active');
-        btnElement.classList.remove('btn-outline-' + (level === 'medium' ? 'warning' : level === 'easy' ? 'success' : level === 'hard' ? 'danger' : 'secondary'));
-        btnElement.classList.add('btn-' + (level === 'medium' ? 'warning' : level === 'easy' ? 'success' : level === 'hard' ? 'danger' : 'secondary'));
+        // تحويل الزر النشط إلى لون ممتلئ
+        if(level === 'easy') btnElement.className = 'btn btn-success active';
+        else if(level === 'medium') btnElement.className = 'btn btn-warning active';
+        else if(level === 'hard') btnElement.className = 'btn btn-danger active';
+        else btnElement.className = 'btn btn-secondary active';
 
 
         // Filter Logic
