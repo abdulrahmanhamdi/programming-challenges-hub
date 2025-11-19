@@ -79,37 +79,35 @@
 <script>
     let ALL_PROBLEMS = [];
 
-    // 1. Load Data
+    // 1. تحميل البيانات
     fetch(CONFIG.PROBLEMS_INDEX)
         .then(res => res.text())
         .then(data => {
             const lines = data.split('\n');
-            ALL_PROBLEMS = []; // Reset
+            ALL_PROBLEMS = []; 
 
-            lines.forEach((line, index) => {
+            lines.forEach((line) => {
                 // التحقق من أن السطر هو سطر جدول ويحتوي على رابط
                 if (line.trim().startsWith("|") && !line.includes("---") && line.includes("](") ) {
                     
                     const parts = line.split("|");
                     
-                    // التأكد من وجود أعمدة كافية لتجنب الأخطاء
+                    // تخطي الأسطر التي لا تحتوي بيانات كافية
                     if (parts.length < 4) return;
 
                     const title = parts[1].trim();
-                    const difficulty = parts[2].trim().toLowerCase();
+                    const difficulty = parts[2].trim().toLowerCase(); // يجب أن تكون easy/medium/hard
                     const rawLink = parts[3].trim();
 
-                    // استخراج الرابط بشكل آمن
+                    // تجاهل ترويسة الجدول
+                    if (title.includes("Problem") || difficulty.includes("Difficulty")) return;
+
+                    // استخراج الرابط
                     const match = rawLink.match(/\((.*)\)/);
-                    
-                    // إذا لم يتم العثور على رابط، تخطى هذا السطر ولا توقف الموقع
                     if (!match) return; 
                     
-                    const link = match[1]; // المسار الكامل
+                    const link = match[1];
                     const slug = link.split("/").pop().replace(".md", "");
-
-                    // تجاهل سطور العناوين (Header)
-                    if (title.includes("Problem") || difficulty.includes("Difficulty")) return;
 
                     ALL_PROBLEMS.push({
                         title,
@@ -120,33 +118,28 @@
                 }
             });
 
-            // Initial Render
+            // عرض الكل عند التحميل
             renderProblems(ALL_PROBLEMS);
         })
         .catch(err => {
-            console.error(err); 
-            document.getElementById("problemsList").innerHTML = `
-                <div class="alert alert-danger text-center">
-                    Error processing index file.<br>
-                    <small class="text-muted">Check console for details.</small>
-                </div>`;
+            document.getElementById("problemsList").innerHTML = `<div class="alert alert-danger">Error loading problems. Make sure python script is run.</div>`;
         });
 
 
-    // 2. Render Function
+    // 2. دالة الرسم
     function renderProblems(list) {
         const container = document.getElementById("problemsList");
         
         if(list.length === 0) {
-            container.innerHTML = "<p class='text-center text-muted py-5'>No problems found in the index.</p>";
+            container.innerHTML = "<div class='col-12 text-center text-muted py-5'>No problems found correctly. Check PROBLEMS_INDEX.md format.</div>";
             return;
         }
 
         container.innerHTML = list.map(p => {
             let badgeClass = "bg-secondary";
             if(p.difficulty === 'easy') badgeClass = "bg-success";
-            if(p.difficulty === 'medium') badgeClass = "bg-warning text-dark";
-            if(p.difficulty === 'hard') badgeClass = "bg-danger";
+            else if(p.difficulty === 'medium') badgeClass = "bg-warning text-dark";
+            else if(p.difficulty === 'hard') badgeClass = "bg-danger";
 
             return `
             <div class="col-md-6 col-lg-4 animate-slide-up">
@@ -165,31 +158,27 @@
     }
 
 
-    // 3. Filter Logic
+    // 3. منطق الفلترة
     function filterDifficulty(level, btnElement) {
-        // UI Button State
+        // تحديث أشكال الأزرار
         document.querySelectorAll('.btn').forEach(b => {
             if(b.onclick && b.onclick.toString().includes('filterDifficulty')) {
                 b.classList.remove('active');
-                // إعادة الألوان الافتراضية للأزرار غير النشطة
-                const text = b.innerText.toLowerCase();
-                if(text === 'show all') b.className = 'btn btn-secondary';
-                else if(text === 'easy') b.className = 'btn btn-outline-success';
-                else if(text === 'medium') b.className = 'btn btn-outline-warning';
-                else if(text === 'hard') b.className = 'btn btn-outline-danger';
+                // إعادة الستايل الافتراضي (Outline)
+                if(b.textContent === 'Show All') b.className = 'btn btn-secondary';
+                else if(b.textContent === 'Easy') b.className = 'btn btn-outline-success';
+                else if(b.textContent === 'Medium') b.className = 'btn btn-outline-warning';
+                else if(b.textContent === 'Hard') b.className = 'btn btn-outline-danger';
             }
         });
         
-        // Activate clicked button
-        btnElement.classList.add('active');
-        // تحويل الزر النشط إلى لون ممتلئ
+        // تفعيل الزر المضغوط (Solid)
         if(level === 'easy') btnElement.className = 'btn btn-success active';
         else if(level === 'medium') btnElement.className = 'btn btn-warning active';
         else if(level === 'hard') btnElement.className = 'btn btn-danger active';
         else btnElement.className = 'btn btn-secondary active';
 
-
-        // Filter Logic
+        // الفلترة الفعلية للبيانات
         if (level === "all") {
             renderProblems(ALL_PROBLEMS);
         } else {
@@ -198,7 +187,7 @@
         }
     }
 
-    // 4. Attach Search
+    // 4. تشغيل البحث
     setupSearch("globalSearchInput", "problemsList");
 </script>
 

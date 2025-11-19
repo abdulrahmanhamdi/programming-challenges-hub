@@ -5,15 +5,22 @@ BASE_DIR = "problems"
 OUTPUT_FILE = "PROBLEMS_INDEX.md"
 
 def get_problem_title(file_path):
-    """Extract the problem title from the first line in the markdown file"""
+    """Extract the problem title and clean it from characters that break the table"""
     try:
         with open(file_path, "r", encoding="utf-8") as f:
             first_line = f.readline().strip()
             if first_line.startswith("#"):
-                return first_line.replace("#", "").strip()
+                # 1. Remove the hash symbol
+                clean_title = first_line.replace("#", "").strip()
+                
+                # 2. (Magic fix) Replace | with - to prevent breaking the table
+                clean_title = clean_title.replace("|", "-")
+                
+                return clean_title
     except Exception as e:
         print(f"Error reading {file_path}: {e}")
     return "Untitled Problem"
+
 
 def main():
     # Make sure we are in the root directory

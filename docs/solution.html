@@ -16,6 +16,7 @@
 
     <link rel="stylesheet" href="assets/css/tabs.css">
     <link rel="stylesheet" href="assets/css/code.css">
+    <link rel="stylesheet" href="assets/css/lang-tabs.css">
 
     </head>
 <body>
@@ -58,18 +59,36 @@
     </div>
 </nav>
 
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 id="problemTitle">Loading Solution...</h2>
-        <a id="problemLinkBtn" href="#" class="btn btn-outline-primary">See Problem Description</a>
-    </div>
-    
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 id="problemTitle">Loading Solution...</h2>
+            <a id="problemLinkBtn" href="#" class="btn btn-outline-primary">See Problem Description</a>
+        </div>
+        
     <div class="lang-tabs mb-0" id="langTabs">
-        <button class="lang-tab-btn active" onclick="switchLang('python')">🐍 Python</button>
-        <button class="lang-tab-btn" onclick="switchLang('javascript')">⚡ JavaScript</button>
-        <button class="lang-tab-btn" onclick="switchLang('java')">☕ Java</button>
-        <button class="lang-tab-btn" onclick="switchLang('cpp')">💠 C++</button>
+
+        <button class="lang-tab-btn active" onclick="switchLang('python')">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" class="lang-icon">
+            Python
+        </button>
+
+        <button class="lang-tab-btn" onclick="switchLang('javascript')">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" class="lang-icon">
+            JavaScript
+        </button>
+
+        <button class="lang-tab-btn" onclick="switchLang('java')">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" class="lang-icon">
+            Java
+        </button>
+
+        <button class="lang-tab-btn" onclick="switchLang('cpp')">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" class="lang-icon">
+            C++
+        </button>
+
     </div>
+
 
     <div class="card rounded-0 rounded-bottom shadow-sm border-top-0">
         <div class="card-body p-0 position-relative">
@@ -90,62 +109,105 @@
 
 <script>
     const params = new URLSearchParams(window.location.search);
-    const slug = params.get("slug"); // e.g. "two-sum"
-    
-    // 1. Initialize Page
-    if(slug) {
+    const slug = params.get("slug");
+
+    // Initialize page
+    if (slug) {
         document.getElementById("problemTitle").innerText = "Solution: " + slug;
-        // Try to find problem link (optional heuristic)
-        // We don't know the difficulty here without fetching index, 
-        // so we might just link to problems list or try a guess.
-        document.getElementById("problemLinkBtn").href = `problems.html`; 
-        
-        // Load default language
-        switchLang('python');
+        document.getElementById("problemLinkBtn").href = `problems.html`;
+        switchLang('python'); // default
     } else {
         document.getElementById("problemTitle").innerText = "No solution selected";
     }
 
-    // 2. Switch Language Logic
+    // Convert slug → CamelCase (e.g. longest-common-prefix → LongestCommonPrefix)
+    function toCamelCase(str) {
+        return str
+            .split(/[-_]/)
+            .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+            .join("");
+    }
+
+    // Convert slug → camelCase (e.g. longest-common-prefix → longestCommonPrefix)
+    function toLowerCamel(str) {
+        let camel = toCamelCase(str);
+        return camel.charAt(0).toLowerCase() + camel.slice(1);
+    }
+
+    // Try multiple filename possibilities
+    function generateFileNames(slug, ext) {
+        const camel = toCamelCase(slug);
+        const lowerCamel = toLowerCamel(slug);
+        const kebab = slug;
+        const snake = slug.replace(/-/g, "_");
+        const upper = slug.toUpperCase();
+        const lower = slug.toLowerCase();
+
+        return [
+            `${kebab}${ext}`,       // long-common-prefix.cpp
+            `${snake}${ext}`,       // long_common_prefix.cpp
+            `${camel}${ext}`,       // LongestCommonPrefix.cpp
+            `${lowerCamel}${ext}`,  // longestCommonPrefix.cpp
+            `${upper}${ext}`,       // LONGESTCOMMONPREFIX.cpp
+            `${lower}${ext}`,       // longestcommonprefix.cpp
+        ];
+    }
+
+    // Main switch function
     async function switchLang(lang) {
-        // Update UI Tabs
-        document.querySelectorAll('.lang-tab-btn').forEach(b => b.classList.remove('active'));
-        event.target.classList.add('active');
-        
+
+        // Update active tab
+        document.querySelectorAll('.lang-tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelector(`button[onclick="switchLang('${lang}')"]`).classList.add('active');
+
         const codeBlock = document.getElementById("codeBlock");
-        codeBlock.innerText = "Loading...";
-        codeBlock.className = "hljs p-4"; // reset class
+        codeBlock.textContent = "Loading...";
+        codeBlock.className = "hljs p-4 language-" + lang;
 
-        // Construct Path
-        const extMap = { python: '.py', javascript: '.js', java: '.java', cpp: '.cpp' };
-        // CONFIG.SOLUTION_DIRS returns path like "../solutions/python/"
-        const fullPath = CONFIG.SOLUTION_DIRS[lang] + slug + extMap[lang];
+        const extMap = {
+            python: ".py",
+            javascript: ".js",
+            java: ".java",
+            cpp: ".cpp"
+        };
 
-        try {
-            const res = await fetch(fullPath);
-            if(!res.ok) throw new Error("Solution file not found.");
-            
-            const code = await res.text();
-            codeBlock.innerText = code;
-            
-            // Syntax Highlight
-            codeBlock.classList.add(`language-${lang}`);
-            hljs.highlightElement(codeBlock);
-            
-        } catch(e) {
-            codeBlock.innerText = `// Solution for ${lang} is not available yet.\n// Path checked: ${fullPath}`;
+        const possibleNames = generateFileNames(slug, extMap[lang]);
+
+        let found = false;
+        for (let name of possibleNames) {
+            const fullPath = CONFIG.SOLUTION_DIRS[lang] + name;
+
+            try {
+                const res = await fetch(fullPath);
+                if (res.ok) {
+                    const code = await res.text();
+                    codeBlock.textContent = code;
+                    hljs.highlightElement(codeBlock);
+                    found = true;
+                    break;
+                }
+            } catch {}
+        }
+
+        if (!found) {
+            codeBlock.textContent =
+                `// No available ${lang} solution found.\n` +
+                `// Tried:\n` +
+                possibleNames.map(n => `//  - ${n}`).join("\n");
         }
     }
 
-    // 3. Copy Function
+    // Copy button
     function copyCode() {
-        const code = document.getElementById("codeBlock").innerText;
+        const code = document.getElementById("codeBlock").textContent;
         navigator.clipboard.writeText(code);
         const btn = document.querySelector('.copy-btn');
         btn.innerText = "Copied!";
-        setTimeout(() => btn.innerText = "Copy", 1500);
+        setTimeout(() => (btn.innerText = "Copy"), 1500);
     }
 </script>
+
+
 
 </body>
 </html>

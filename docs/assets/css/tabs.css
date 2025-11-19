@@ -1,47 +1,68 @@
+/* ==================================================
+   Language Tabs - LeetCode Original Style
+   Light + Dark Mode Support
+================================================== */
+
+/* Container */
 .lang-tabs {
-    border-bottom: 1px solid #e5e7eb;
-    overflow-x: auto;
-    white-space: nowrap;
-}
-.dark-mode .lang-tabs {
-    border-color: #475569;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
 }
 
+/* Base Button Style */
 .lang-tab-btn {
-    border: none;
-    background: transparent;
-    padding: 11px 18px;
-    margin-right: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: 1px solid #d1d5db;
+    background: #f3f4f6;
+    color: #374151;
     font-weight: 600;
     cursor: pointer;
-    border-radius: 8px 8px 0 0;
-    position: relative;
-    color: #4b5563;
+    transition: 0.25s ease;
+    white-space: nowrap;
 }
-.dark-mode .lang-tab-btn { color: #d1d5db; }
 
+/* Icons */
+.lang-icon {
+    width: 22px;
+    height: 22px;
+}
+
+/* Hover Effect */
+.lang-tab-btn:hover {
+    background: #e5e7eb;
+}
+
+/* Active Tab - Light Mode */
 .lang-tab-btn.active {
-    color: #111827;
     background: #ffffff;
+    color: #ffa116;            /* LeetCode Orange */
+    border-color: #ffa116;
+    box-shadow: 0 0 0 1px #ffa116;
 }
+
+/* ==================================================
+   Dark Mode
+================================================== */
+
+.dark-mode .lang-tab-btn {
+    background: #1c1c1e;
+    color: #9ca3af;
+    border-color: #3f3f46;
+}
+
+.dark-mode .lang-tab-btn:hover {
+    background: #262629;
+}
+
 .dark-mode .lang-tab-btn.active {
-    background: #1e293b;
-    color: #f1f5f9;
+    background: #2a2a2e;
+    color: #ffa116;
+    border-color: #ffa116;
+    box-shadow: 0 0 0 1px #ffa116;
 }
-
-.lang-tab-btn.active::after {
-    content: "";
-    position: absolute;
-    left: 20%;
-    right: 20%;
-    bottom: -1px;
-    height: 3px;
-    border-radius: 999px;
-    background: currentColor;
-}
-
-/* per-language colors */
-.lang-tab-btn.lang-python.active { color: #22c55e; }
-.lang-tab-btn.lang-javascript.active { color: #eab308; }
-.lang-tab-btn.lang-java.active { color: #f97316; }
-.lang-tab-btn.lang-cpp.active { color: #3b82f6; }

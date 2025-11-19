@@ -1,47 +1,122 @@
-/* assets/css/code.css */
+/* ==================================================
+    GLOBAL CODE STYLE — GitHub / VSCode Like
+================================================== */
+
+pre, code {
+    font-family: "Fira Code", "Consolas", monospace !important;
+    font-size: 15px !important;
+    line-height: 1.6 !important;
+    tab-size: 4;
+}
+
+/* ==================================================
+    CODE BLOCK (PRE)
+================================================== */
 
 pre {
-    background-color: #0d1117 !important;
+    background-color: #0d1117 !important;     /* GitHub Dark */
     border-radius: 8px;
-    padding: 1rem;
+    padding: 1.5rem;
     position: relative;
     margin-bottom: 1.5rem;
-    border: 1px solid var(--border-color);
+    border: 1px solid #30363d;
+
+    /* Correct code behavior */
+    white-space: pre;               /* Keep indentation */
+    overflow-x: auto;
+    overflow-y: auto;
 }
 
-code {
-    font-family: 'Fira Code', 'Consolas', monospace;
-    font-size: 0.9em;
+/* Fix highlight.js padding override */
+code.hljs {
+    display: block;
+    padding: 0 !important;
 }
+
+/* ==================================================
+    SCROLLBAR STYLE
+================================================== */
+
+pre::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+}
+
+pre::-webkit-scrollbar-track {
+    background: #1a1f24;
+    border-radius: 4px;
+}
+
+pre::-webkit-scrollbar-thumb {
+    background: #444;
+    border-radius: 4px;
+}
+
+pre::-webkit-scrollbar-thumb:hover {
+    background: #666;
+}
+
+/* ==================================================
+    INLINE CODE STYLE
+================================================== */
+
+p code,
+li code {
+    background-color: rgba(255,255,255,0.08);
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: #ea580c; /* Orange inline code */
+}
+
+body.dark-mode p code,
+body.dark-mode li code {
+    color: #fdba74;
+}
+
+/* ==================================================
+    COPY BUTTON
+================================================== */
 
 .copy-btn {
     position: absolute;
     top: 8px;
     right: 8px;
     background: rgba(255, 255, 255, 0.1);
-    color: #fff;
+    color: #ffffff;
     border: 1px solid rgba(255, 255, 255, 0.2);
     padding: 4px 10px;
     font-size: 12px;
     border-radius: 4px;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: background 0.2s ease;
+    user-select: none;
 }
 
 .copy-btn:hover {
     background: rgba(255, 255, 255, 0.2);
 }
 
-p code, 
-li code {
-    background-color: var(--code-bg);
-    padding: 2px 6px;
-    border-radius: 4px;
-    color: #ea580c;
-    font-size: 0.9em;
+/* ==================================================
+    OPTIONAL — LINE NUMBERS (Off by default)
+    (Enable by uncommenting)
+================================================== */
+
+/*
+pre {
+    counter-reset: line;
 }
 
-body.dark-mode p code, 
-body.dark-mode li code {
-    color: #fdba74;
+code.hljs > span {
+    counter-increment: line;
 }
+
+code.hljs > span::before {
+    content: counter(line);
+    display: inline-block;
+    width: 32px;
+    margin-right: 16px;
+    text-align: right;
+    color: #6e7681;
+    user-select: none;
+}
+*/
