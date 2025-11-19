@@ -1,10 +1,19 @@
-/* ---------------------- CARDS ---------------------- */
+/* ==================================================
+    CARDS (Unified Height)
+================================================== */
 .card {
     background-color: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: 12px;
     box-shadow: var(--shadow-sm);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    /* Makes all cards equal height inside columns */
+    height: 100%; 
+
+    /* Ensures beautiful internal layout */
+    display: flex;
+    flex-direction: column;
 }
 
 .card:hover {
@@ -12,7 +21,9 @@
     box-shadow: var(--shadow-md);
 }
 
-/* ---------------------- SIDEBAR ---------------------- */
+/* ==================================================
+    SIDEBAR + LIST ITEMS
+================================================== */
 #sidebar {
     background-color: var(--bg-sidebar) !important;
     border-right: 1px solid var(--border-color) !important;
@@ -36,58 +47,46 @@
     color: #fff !important;
 }
 
-/* ---------------------- BUTTONS ---------------------- */
-.btn-outline-secondary {
-    color: var(--text-main);
-    border-color: var(--border-color);
-}
-
-.btn-outline-secondary:hover {
-    background-color: var(--border-color);
-    color: var(--text-main);
-}
-
-/* ---------------------- FAVORITE BUTTON ---------------------- */
-.fav-btn {
-    border: none;
-    background: transparent;
-    font-size: 1.5rem;
-    color: var(--border-color);
+/* ==================================================
+    MODERN ICON BUTTONS
+================================================== */
+.btn-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-card);
+    color: var(--text-muted);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.3s;
 }
 
-body.dark-mode .fav-btn {
-    color: #475569;
+.btn-icon:hover {
+    transform: translateY(-2px);
+    color: var(--primary-color);
 }
 
-.fav-btn:hover {
-    transform: scale(1.1);
-    color: #cbd5e1;
-}
-
-.fav-btn.active {
+/* Favorite button active state */
+.fav-btn.active,
+.btn-icon.active-fav {
     color: #fbbf24 !important;
-    text-shadow: 0 0 15px rgba(251, 191, 36, 0.4);
+    background-color: rgba(251, 191, 36, 0.1);
+    border-color: #fbbf24;
 }
 
-/* ---------------------- INPUTS (Search) ---------------------- */
-.form-control {
-    background-color: var(--bg-card);
-    border-color: var(--border-color);
-    color: var(--text-main);
+/* ==================================================
+    ANIMATIONS
+================================================== */
+.animate-fade { 
+    animation: fadeIn 0.6s ease forwards; 
 }
 
-.form-control:focus {
-    background-color: var(--bg-card);
-    color: var(--text-main);
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+.animate-slide-up { 
+    animation: slideUp 0.6s ease forwards; 
 }
-
-/* ---------------------- ANIMATIONS ---------------------- */
-.animate-fade { animation: fadeIn 0.6s ease forwards; }
-.animate-slide-up { animation: slideUp 0.6s ease forwards; }
 
 @keyframes fadeIn { 
     from { opacity: 0; } 
@@ -97,54 +96,4 @@ body.dark-mode .fav-btn {
 @keyframes slideUp { 
     from { opacity: 0; transform: translateY(15px); } 
     to { opacity: 1; transform: translateY(0); } 
-}
-
-/* --------------------------------------------------------- */
-/* ----------------- MODERN ICON BUTTONS ------------------- */
-/* --------------------------------------------------------- */
-
-/* Generic circular icon button (Theme & Favorite buttons) */
-.btn-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%; 
-    border: 1px solid var(--border-color);
-    background-color: var(--bg-card);
-    color: var(--text-muted);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    font-size: 1.1rem;
-}
-
-.btn-icon:hover {
-    background-color: var(--code-bg);
-    transform: translateY(-2px);
-    color: var(--primary-color);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-/* Active favorite (star) icon button */
-.btn-icon.active-fav {
-    background-color: #fffbeb; 
-    color: #fbbf24; 
-    border-color: #fbbf24;
-}
-
-body.dark-mode .btn-icon.active-fav {
-    background-color: #451a03;
-    border-color: #fbbf24;
-}
-
-/* Navbar toggle button (mobile) */
-.navbar-toggler {
-    border: none;
-    padding: 0;
-    color: #fff;
-}
-
-.navbar-toggler:focus {
-    box-shadow: none;
 }

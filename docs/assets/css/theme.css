@@ -23,11 +23,11 @@ body.dark-mode {
     --bg-card: #1e293b;
     --bg-sidebar: #1e293b;
     --text-main: #f8fafc;
-    --text-muted: #cbd5e1;
+    --text-muted: #cbd5e1; /* Soft light gray for subtext */
     --border-color: #334155;
     --primary-color: #60a5fa;
 
-    /* Navbar (dark mode gradient) */
+    /* Dark mode navbar gradient */
     --nav-bg: linear-gradient(135deg, #020617 0%, #1e3a8a 100%);
     --nav-text: #ffffff;
 }
@@ -42,81 +42,62 @@ body {
 }
 
 /* ==================================================
-    1. NAVBAR FIXES
+    STRONG DARK MODE FIXES
 ================================================== */
-.navbar {
-    background: var(--nav-bg) !important;
-    transition: background 0.3s ease;
+
+/* 1. Force light text inside cards (sub-elements) */
+body.dark-mode .card h1,
+body.dark-mode .card h2,
+body.dark-mode .card h3,
+body.dark-mode .card h4,
+body.dark-mode .card h5,
+body.dark-mode .card p,
+body.dark-mode .card span,
+body.dark-mode .text-muted {
+    color: var(--text-muted) !important;
 }
 
-/* Navbar links, brand, and icons */
-.navbar-brand,
-.navbar-nav .nav-link,
-.navbar-toggler {
-    color: var(--nav-text) !important;
+/* Titles inside cards should be brighter */
+body.dark-mode .card h4 {
+    color: var(--text-main) !important;
 }
 
-/* Mobile toggler border */
-.navbar-toggler {
+/* 2. Card background and border fix */
+body.dark-mode .card {
+    background-color: var(--bg-card);
     border-color: var(--border-color);
 }
 
-/* Remove default Bootstrap icon */
-.navbar-toggler-icon {
-    background-image: none !important;
+/* ==================================================
+    NAVBAR FIXES
+================================================== */
+.navbar {
+    background: var(--nav-bg) !important;
 }
 
-/* Our custom icon (Bootstrap Icon) */
+.navbar-brand,
+.navbar-nav .nav-link,
 .navbar-toggler i {
     color: var(--nav-text) !important;
 }
 
 /* ==================================================
-    2. BUTTONS FIX (Yellow + Secondary)
+    BUTTON FIXES IN DARK MODE
 ================================================== */
 
-/* Outline warning (Light mode) */
-.btn-outline-warning {
-    color: #d97706;
-    border-color: #d97706;
-}
-
-/* Outline warning (Dark mode) */
+/* Outline warning (yellow button) */
 body.dark-mode .btn-outline-warning {
     color: #fbbf24;
     border-color: #fbbf24;
 }
 
-/* Solid yellow hover/active for all modes */
-.btn-outline-warning:hover,
-.btn-outline-warning:active,
-.btn-outline-warning.active,
-.btn-warning {
-    background-color: #fbbf24 !important;
-    border-color: #fbbf24 !important;
+body.dark-mode .btn-outline-warning:hover {
+    background-color: #fbbf24;
     color: #000000 !important;
 }
 
-/* Fix secondary outline in dark mode */
+/* Secondary outline button */
 body.dark-mode .btn-outline-secondary {
     color: #e2e8f0;
-    border-color: #64748b;
-}
-body.dark-mode .btn-outline-secondary:hover,
-body.dark-mode .btn-outline-secondary.active {
-    background-color: #475569;
-    color: #ffffff !important;
-}
-
-/* ==================================================
-    3. TEXT FIXES IN DARK MODE
-================================================== */
-body.dark-mode h1,
-body.dark-mode h2,
-body.dark-mode h3,
-body.dark-mode h4,
-body.dark-mode h5,
-body.dark-mode h6,
-body.dark-mode .card-title {
-    color: var(--text-main) !important;
+    border-color: #475569;
 }
