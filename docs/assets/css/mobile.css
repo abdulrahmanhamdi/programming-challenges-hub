@@ -1,0 +1,58 @@
+/* assets/css/mobile.css */
+
+/* --- Mobile and Tablet Screens (less than 992px) --- */
+@media (max-width: 991.98px) {
+    
+    /* Improve container spacing */
+    .container {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    /* Sidebar turns into an offcanvas-like menu that appears and disappears */
+    #sidebar {
+        display: none; /* Hidden by default */
+        position: fixed;
+        top: 60px; /* Below the navbar */
+        left: 0;
+        bottom: 0;
+        width: 100%; /* Full width */
+        z-index: 999;
+        background-color: var(--bg-sidebar) !important;
+        padding: 20px;
+        overflow-y: auto;
+        border-right: none;
+    }
+
+    /* Class to show the sidebar when the button is clicked */
+    #sidebar.show-mobile {
+        display: block;
+        animation: slideInLeft 0.3s ease;
+    }
+
+    /* Adjust large text sizes */
+    h1.display-5 { font-size: 2.5rem; }
+    h2 { font-size: 1.75rem; }
+    
+    /* Hide some unnecessary buttons in the navbar */
+    .navbar-nav .nav-link {
+        text-align: center;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    /* Improve filter buttons to allow horizontal scrolling */
+    .d-flex.gap-2.flex-wrap {
+        flex-wrap: nowrap !important;
+        overflow-x: auto;
+        padding-bottom: 10px;
+    }
+    .d-flex.gap-2.flex-wrap::-webkit-scrollbar {
+        height: 4px;
+    }
+}
+
+@keyframes slideInLeft {
+    from { transform: translateX(-100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}

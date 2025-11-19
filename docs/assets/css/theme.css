@@ -1,5 +1,4 @@
-/* assets/css/theme.css */
-
+/* ---------------------------------- THEME VARIABLES ---------------------------------- */
 :root {
     --bg-body: #f8fafc;
     --bg-card: #ffffff;
@@ -13,6 +12,7 @@
     --code-bg: #f1f5f9;
 }
 
+/* ---------------------------------- DARK MODE VARIABLES ---------------------------------- */
 body.dark-mode {
     --bg-body: #0f172a;
     --bg-card: #1e293b;
@@ -26,27 +26,45 @@ body.dark-mode {
     --code-bg: #020617;
 }
 
+/* ---------------------------------- BODY STYLING ---------------------------------- */
 body {
     background-color: var(--bg-body) !important;
     color: var(--text-main) !important;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* Adjust Bootstrap background helpers in dark mode */
 body.dark-mode .bg-light {
     background-color: var(--bg-body) !important;
 }
+
 body.dark-mode .bg-white {
     background-color: var(--bg-card) !important;
 }
+
+/* Border overrides */
 body.dark-mode .border, 
 body.dark-mode .border-bottom, 
 body.dark-mode .border-end, 
 body.dark-mode .border-top {
     border-color: var(--border-color) !important;
 }
+
+/* Text overrides */
 body.dark-mode .text-dark {
     color: var(--text-main) !important;
 }
 body.dark-mode .text-muted {
     color: var(--text-muted) !important;
+}
+
+/* ---------------------------------- NAVBAR GRADIENT ---------------------------------- */
+/* Gradient background for navbar */
+.bg-primary-gradient {
+    background: linear-gradient(135deg, #0f172a 0%, #0d6efd 100%);
+}
+
+/* Dark mode version of navbar gradient */
+body.dark-mode .bg-primary-gradient {
+    background: linear-gradient(135deg, #020617 0%, #1e3a8a 100%);
 }

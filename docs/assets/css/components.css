@@ -1,6 +1,4 @@
-/* assets/css/components.css */
-
-/* --- CARDS --- */
+/* ---------------------- CARDS ---------------------- */
 .card {
     background-color: var(--bg-card);
     border: 1px solid var(--border-color);
@@ -14,7 +12,7 @@
     box-shadow: var(--shadow-md);
 }
 
-/* --- SIDEBAR --- */
+/* ---------------------- SIDEBAR ---------------------- */
 #sidebar {
     background-color: var(--bg-sidebar) !important;
     border-right: 1px solid var(--border-color) !important;
@@ -38,17 +36,18 @@
     color: #fff !important;
 }
 
-/* --- BUTTONS --- */
+/* ---------------------- BUTTONS ---------------------- */
 .btn-outline-secondary {
     color: var(--text-main);
     border-color: var(--border-color);
 }
+
 .btn-outline-secondary:hover {
     background-color: var(--border-color);
     color: var(--text-main);
 }
 
-/* --- FAVORITE BUTTON --- */
+/* ---------------------- FAVORITE BUTTON ---------------------- */
 .fav-btn {
     border: none;
     background: transparent;
@@ -57,6 +56,7 @@
     cursor: pointer;
     transition: all 0.2s;
 }
+
 body.dark-mode .fav-btn {
     color: #475569;
 }
@@ -71,12 +71,13 @@ body.dark-mode .fav-btn {
     text-shadow: 0 0 15px rgba(251, 191, 36, 0.4);
 }
 
-/* --- INPUTS (Search) --- */
+/* ---------------------- INPUTS (Search) ---------------------- */
 .form-control {
     background-color: var(--bg-card);
     border-color: var(--border-color);
     color: var(--text-main);
 }
+
 .form-control:focus {
     background-color: var(--bg-card);
     color: var(--text-main);
@@ -84,7 +85,7 @@ body.dark-mode .fav-btn {
     box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }
 
-/* --- ANIMATIONS --- */
+/* ---------------------- ANIMATIONS ---------------------- */
 .animate-fade { animation: fadeIn 0.6s ease forwards; }
 .animate-slide-up { animation: slideUp 0.6s ease forwards; }
 
@@ -92,7 +93,58 @@ body.dark-mode .fav-btn {
     from { opacity: 0; } 
     to { opacity: 1; } 
 }
+
 @keyframes slideUp { 
     from { opacity: 0; transform: translateY(15px); } 
     to { opacity: 1; transform: translateY(0); } 
+}
+
+/* --------------------------------------------------------- */
+/* ----------------- MODERN ICON BUTTONS ------------------- */
+/* --------------------------------------------------------- */
+
+/* Generic circular icon button (Theme & Favorite buttons) */
+.btn-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%; 
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-card);
+    color: var(--text-muted);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 1.1rem;
+}
+
+.btn-icon:hover {
+    background-color: var(--code-bg);
+    transform: translateY(-2px);
+    color: var(--primary-color);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Active favorite (star) icon button */
+.btn-icon.active-fav {
+    background-color: #fffbeb; 
+    color: #fbbf24; 
+    border-color: #fbbf24;
+}
+
+body.dark-mode .btn-icon.active-fav {
+    background-color: #451a03;
+    border-color: #fbbf24;
+}
+
+/* Navbar toggle button (mobile) */
+.navbar-toggler {
+    border: none;
+    padding: 0;
+    color: #fff;
+}
+
+.navbar-toggler:focus {
+    box-shadow: none;
 }
