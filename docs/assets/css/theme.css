@@ -1,38 +1,40 @@
-/* ============================
+/* ==================================================
     LIGHT MODE VARIABLES
-============================ */
+================================================== */
 :root {
     --bg-body: #f8fafc;
     --bg-card: #ffffff;
     --bg-sidebar: #ffffff;
-    --text-main: #1e293b;        /* dark navy */
-    --text-muted: #64748b;       /* soft gray */
+    --text-main: #1e293b;
+    --text-muted: #64748b;
     --border-color: #e2e8f0;
     --primary-color: #0d6efd;
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
-    --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
-    --code-bg: #f1f5f9;
+
+    /* Navbar (light mode) */
+    --nav-bg: #ffffff;
+    --nav-text: #1e293b;
 }
 
-/* ============================
+/* ==================================================
     DARK MODE VARIABLES
-============================ */
+================================================== */
 body.dark-mode {
-    --bg-body: #0f172a;          /* very dark navy background */
-    --bg-card: #1e293b;          /* card background */
+    --bg-body: #0f172a;
+    --bg-card: #1e293b;
     --bg-sidebar: #1e293b;
-    --text-main: #f8fafc;        /* white text */
-    --text-muted: #cbd5e1;       /* very light gray */
+    --text-main: #f8fafc;
+    --text-muted: #cbd5e1;
     --border-color: #334155;
-    --primary-color: #60a5fa;    /* soft sky blue */
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.5);
-    --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.5);
-    --code-bg: #020617;
+    --primary-color: #60a5fa;
+
+    /* Navbar (dark mode gradient) */
+    --nav-bg: linear-gradient(135deg, #020617 0%, #1e3a8a 100%);
+    --nav-text: #ffffff;
 }
 
-/* ============================
+/* ==================================================
     GLOBAL BODY STYLING
-============================ */
+================================================== */
 body {
     background-color: var(--bg-body);
     color: var(--text-main);
@@ -40,84 +42,81 @@ body {
 }
 
 /* ==================================================
-    DARK MODE FIXES (Override Bootstrap Defaults)
+    1. NAVBAR FIXES
+================================================== */
+.navbar {
+    background: var(--nav-bg) !important;
+    transition: background 0.3s ease;
+}
+
+/* Navbar links, brand, and icons */
+.navbar-brand,
+.navbar-nav .nav-link,
+.navbar-toggler {
+    color: var(--nav-text) !important;
+}
+
+/* Mobile toggler border */
+.navbar-toggler {
+    border-color: var(--border-color);
+}
+
+/* Remove default Bootstrap icon */
+.navbar-toggler-icon {
+    background-image: none !important;
+}
+
+/* Our custom icon (Bootstrap Icon) */
+.navbar-toggler i {
+    color: var(--nav-text) !important;
+}
+
+/* ==================================================
+    2. BUTTONS FIX (Yellow + Secondary)
 ================================================== */
 
-/* 1. Fix card backgrounds and borders */
-body.dark-mode .card {
-    background-color: var(--bg-card);
-    border-color: var(--border-color);
-    color: var(--text-main);
+/* Outline warning (Light mode) */
+.btn-outline-warning {
+    color: #d97706;
+    border-color: #d97706;
 }
 
-/* 2. Force headings and card text to be bright */
-body.dark-mode h1, 
-body.dark-mode h2, 
-body.dark-mode h3, 
-body.dark-mode h4, 
-body.dark-mode h5, 
-body.dark-mode h6,
-body.dark-mode .card-title,
-body.dark-mode .card-text {
-    color: var(--text-main) !important;
-}
-
-/* 3. Fix muted text color */
-body.dark-mode .text-muted {
-    color: var(--text-muted) !important;
-}
-
-/* 4. Fix dropdown menus */
-body.dark-mode .dropdown-menu {
-    background-color: var(--bg-card);
-    border-color: var(--border-color);
-}
-
-body.dark-mode .dropdown-item {
-    color: var(--text-main);
-}
-
-body.dark-mode .dropdown-item:hover {
-    background-color: var(--border-color);
-}
-
-/* 5. Fix sidebar list items */
-body.dark-mode .list-group-item {
-    color: var(--text-main);
-}
-
-body.dark-mode .list-group-item.text-dark {
-    color: var(--text-main) !important;
-}
-/* =========================================
-   FIX BUTTON COLORS IN DARK MODE 
-   (Fix filter button colors in dark mode)
-   ========================================= */
-
-/* 1. Fix Medium button (yellow) */
+/* Outline warning (Dark mode) */
 body.dark-mode .btn-outline-warning {
-    color: #fcd34d; /* Light yellow text */
-    border-color: #fcd34d;
-}
-body.dark-mode .btn-outline-warning:hover,
-body.dark-mode .btn-warning {
-    background-color: #fcd34d;
-    color: #000 !important; /* Black text when active for readability */
+    color: #fbbf24;
+    border-color: #fbbf24;
 }
 
-/* 2. Fix Show All button (gray) */
-body.dark-mode .btn-secondary,
-body.dark-mode .btn-outline-secondary {
-    color: #e2e8f0; /* Off-white/grayish text */
-    border-color: #475569;
+/* Solid yellow hover/active for all modes */
+.btn-outline-warning:hover,
+.btn-outline-warning:active,
+.btn-outline-warning.active,
+.btn-warning {
+    background-color: #fbbf24 !important;
+    border-color: #fbbf24 !important;
+    color: #000000 !important;
 }
-body.dark-mode .btn-secondary.active,
-body.dark-mode .btn-secondary:hover {
-    background-color: #475569;
+
+/* Fix secondary outline in dark mode */
+body.dark-mode .btn-outline-secondary {
+    color: #e2e8f0;
     border-color: #64748b;
 }
+body.dark-mode .btn-outline-secondary:hover,
+body.dark-mode .btn-outline-secondary.active {
+    background-color: #475569;
+    color: #ffffff !important;
+}
 
-/* 3. Remove text-dark effect which breaks dark mode */
-body.dark-mode .text-dark {
+/* ==================================================
+    3. TEXT FIXES IN DARK MODE
+================================================== */
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode h5,
+body.dark-mode h6,
+body.dark-mode .card-title {
     color: var(--text-main) !important;
 }
