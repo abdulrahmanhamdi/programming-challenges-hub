@@ -171,3 +171,69 @@
         transform: translateY(0);
     }
 }
+/* ================================================
+   MODERN CLEAN ROUNDED CARDS — DESIGN A
+================================================ */
+
+.problem-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 18px;
+    padding: 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    transition: 0.25s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.problem-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+    border-color: var(--primary-color);
+}
+
+.problem-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.problem-buttons {
+    margin-top: auto;
+}
+
+.problem-btn {
+    width: 100%;
+    margin-bottom: 8px;
+    border-radius: 10px;
+    padding: 10px;
+    font-weight: 600;
+    transition: 0.25s ease;
+}
+
+.problem-btn:hover {
+    opacity: 0.9;
+}
+
+.difficulty-badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.difficulty-easy {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.difficulty-medium {
+    background: #fef3c7;
+    color: #b45309;
+}
+
+.difficulty-hard {
+    background: #fee2e2;
+    color: #b91c1c;
+}

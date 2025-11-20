@@ -143,17 +143,36 @@
 
             return `
             <div class="col-md-6 col-lg-4 animate-slide-up">
-                <div class="card p-3 shadow-sm h-100">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <h5 class="mb-2 text-truncate" title="${p.title}">${p.title}</h5>
-                        <span class="badge ${badgeClass}">${p.difficulty.toUpperCase()}</span>
+                <div class="problem-card">
+
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="problem-title text-truncate" title="${p.title}">
+                            ${p.title}
+                        </span>
+                        <span class="difficulty-badge 
+                            ${p.difficulty === 'easy' ? 'difficulty-easy' :
+                            p.difficulty === 'medium' ? 'difficulty-medium' :
+                            'difficulty-hard'}">
+                            ${p.difficulty.toUpperCase()}
+                        </span>
                     </div>
-                    <div class="mt-auto pt-3">
-                        <a href="problem.html?id=${p.link}" class="btn btn-sm btn-outline-primary w-100 mb-2">View Problem</a>
-                        <a href="solution.html?slug=${p.slug}" class="btn btn-sm btn-outline-success w-100">View Solution</a>
+
+                    <div class="problem-buttons mt-3">
+                        <a href="problem.html?id=${p.link}" 
+                        class="btn btn-outline-primary problem-btn">
+                        View Problem
+                        </a>
+
+                        <a href="solution.html?slug=${p.slug}" 
+                        class="btn btn-outline-success problem-btn">
+                        View Solution
+                        </a>
                     </div>
+
                 </div>
-            </div>`;
+            </div>
+            `;
+
         }).join("");
     }
 
